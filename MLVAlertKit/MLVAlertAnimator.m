@@ -35,7 +35,8 @@ static NSString *const kMLVGroupAnimationKey = @"kMLVGroupAnimationKey";
 @interface MLVAlertAnimator ()
 
 @property (nonatomic, assign, readwrite) MLVAlertControllerStyle preferredStyle;
-
+@property (nonatomic, weak) NSLayoutConstraint *centerY;
+@property (nonatomic, strong) NSArray *observers;
 @end
 
 @implementation MLVAlertAnimator
@@ -87,15 +88,29 @@ static NSString *const kMLVGroupAnimationKey = @"kMLVGroupAnimationKey";
         toView.layer.cornerRadius = 10.0;
         
         toView.translatesAutoresizingMaskIntoConstraints = NO;
-        [NSLayoutConstraint constraintWithItem:toView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:container attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0].active = YES;
+        
+        // toView's constraints
+        NSMutableArray *constraints = NSMutableArray.new;
+        
+        [constraints addObject:[NSLayoutConstraint constraintWithItem:toView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:container attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
         
         if (self.preferredStyle == MLVAlertControllerStyleAlert) {
             
-            [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=10.0-[toView(>=44.0)]->=10.0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(toView)]];
+            [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=10.0-[toView(>=44.0)]->=10.0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(toView)]];
             
-            [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[toView(==270.0)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(toView)]];
+            [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[toView(==270.0)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(toView)]];
             
-            [NSLayoutConstraint constraintWithItem:toView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:container attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0].active = YES;
+            self.centerY = [NSLayoutConstraint constraintWithItem:toView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:container attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+            [constraints addObject:self.centerY];
+            
+            [self addObservers];
+            
+            if ([UIDevice currentDevice].systemVersion.doubleValue >= 8.0) {
+                [NSLayoutConstraint activateConstraints:constraints];
+            } else {
+                [container addConstraints:constraints];
+            }
+            
             
             CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
             animation.duration = duration;
@@ -109,9 +124,15 @@ static NSString *const kMLVGroupAnimationKey = @"kMLVGroupAnimationKey";
         } else {
             [UIApplication sharedApplication].keyWindow.backgroundColor = UIColor.blackColor;
             
-            [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=10.0-[toView(>=44.0)]-10.0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(toView)]];
+            [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|->=10.0-[toView(>=44.0)]-10.0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(toView)]];
             
-            [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-<=10.0@750-[toView(>=44.0,<=394.0)]-<=10.0@750-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(toView)]];
+            [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-<=10.0@750-[toView(>=44.0,<=394.0)]-<=10.0@750-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(toView)]];
+            
+            if ([UIDevice currentDevice].systemVersion.doubleValue >= 8.0) {
+                [NSLayoutConstraint activateConstraints:constraints];
+            } else {
+                [container addConstraints:constraints];
+            }
             
             CABasicAnimation *appearDismiss = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
             appearDismiss.duration = duration;
@@ -164,6 +185,9 @@ static NSString *const kMLVGroupAnimationKey = @"kMLVGroupAnimationKey";
             group.removedOnCompletion = NO;
             group.autoreverses = NO;
             [fromView.layer addAnimation:group forKey:kMLVGroupAnimationKey];
+            
+            [[NSNotificationCenter defaultCenter] removeObserver:self];
+            
         } else {
             CABasicAnimation *appearDismiss = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
             appearDismiss.duration = duration;
@@ -196,6 +220,35 @@ static NSString *const kMLVGroupAnimationKey = @"kMLVGroupAnimationKey";
     BOOL complete = ![context transitionWasCancelled];
     
     [context completeTransition:complete];
+}
+
+#pragma mark - observers
+- (void)addObservers {
+    __weak typeof(self) weakSelf = self;
+    NSObject *oberser1 = [[NSNotificationCenter defaultCenter] addObserverForName:UIKeyboardWillShowNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        __strong typeof(self) self = weakSelf;
+        
+        NSDictionary *userInfo = note.userInfo;
+        
+        NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+        CGRect keyboardRect = [aValue CGRectValue];
+        
+        self.centerY.constant = -CGRectGetHeight(keyboardRect) / 2;
+    }];
+    
+    NSObject *oberser2 = [[NSNotificationCenter defaultCenter] addObserverForName:UIKeyboardWillHideNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        __strong typeof(self) self = weakSelf;
+        
+        self.centerY.constant = 0;
+    }];
+    
+    self.observers = @[oberser1, oberser2];
+}
+
+- (void)removeObservers {
+    [self.observers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[NSNotificationCenter defaultCenter] removeObserver:obj];
+    }];
 }
 
 @end
