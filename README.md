@@ -1,7 +1,7 @@
 
 # MLVAlertKit
-[![Platform](https://img.shields.io/badge/platform-iOS8%2B-lightgrey.svg)]()
-[![CocoaPods](https://img.shields.io/badge/pod-1.0.0-377ADE.svg)]()
+[![Platform](https://img.shields.io/badge/platform-iOS7%2B-lightgrey.svg)]()
+[![CocoaPods](https://img.shields.io/badge/pod-1.1.0-377ADE.svg)]()
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](http://img.shields.io/badge/license-MIT-black.svg)](http://opensource.org/licenses/MIT)
 [![Twitter](https://img.shields.io/badge/twitter-@melvyndev-blue.svg?style=flat)](http://twitter.com/melvyndev)
@@ -11,9 +11,10 @@ MLVAlertKit is a customizable alert and action sheet UI framework like UIAlertCo
 [![MLVAlertKit](https://raw.github.com/melvyndev/Assets/master/MLVAlertKit.gif)]()
 
 ## Requirements
-| MLVAlertKit Version | Minimum iOS Target  |
-|:-------------------:|:-------------------:|
-| 1.0.0               | iOS 8               |
+| MLVAlertKit Version | Minimum iOS Target  | Descriptions            |
+|:-------------------:|:-------------------:|:-----------------------:|
+| 1.0.0               | iOS 8               |                         |
+| 1.1.0               | iOS 7               | add UITextField support |
 
 ## Installation
 MLVAlertKit can be added to a project using CocoaPods、Cathage, One may also use source files included in the project.
@@ -21,12 +22,12 @@ MLVAlertKit can be added to a project using CocoaPods、Cathage, One may also us
 ###CocoaPods
 [CocoaPods](http://cocoapods.org) is the recommended way to add MLVAlertKit to your project.
 
-1. Add a pod entry for MLVAlertKit to your Podfile `pod 'MLVAlertKit', '~> 1.0.0'`
-2. Install the pod(s) by running `pod install`.
+1. Add a pod entry for MLVAlertKit to your Podfile `pod 'MLVAlertKit', '~> 1.1.0'` or `pod 'MLVAlertKit'`
+2. Install the pod(s) by running `pod install` or update by running `pod update`
 3. Include MLVAlertKit wherever you need it with `#import <MLVAlertKit/MLVAlertKit.h>`.
 
 ###Carthage
-1. Add MLVAlertKit to your Cartfile. e.g., `github "melvyndev/MLVAlertKit" ~> 1.0.0`
+1. Add MLVAlertKit to your Cartfile. e.g., `github "melvyndev/MLVAlertKit" ~> 1.1.0`
 2. Run `carthage update`
 3. Follow the rest of the [standard Carthage installation instructions](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application) to add MLVAlertKit to your project.
 
@@ -42,10 +43,16 @@ You can present the alert from any UIViewController like UIAlertController.
 ```objective-c
 MLVAlertController *alert = [MLVAlertController alertControllerWithTitle:@"Remind !!" message:@"Support is on Github" preferredStyle:MLVAlertControllerStyleAlert];
 MLVAlertAction *cancel = [MLVAlertAction actionWithTitle:@"Cancel" style:MLVAlertActionStyleCancel handler:^(MLVAlertAction * _Nonnull action) {
-//
+
 }];
 [alert addAction:cancel];
 [self presentViewController:alert animated:YES completion:NULL];
+```
+
+Add UITextFiels using the reference that:
+```objective-c
+- (void)addTextFieldWithConfigurationHandler:(void (^ __nullable)(UITextField *textField))configurationHandler;
+
 ```
 
 If you need to configure the attributes you can do this by using the MLVAlertController reference that:

@@ -23,8 +23,7 @@
 //
 
 #import "MLVViewController.h"
-
-@import MLVAlertKit;
+#import <MLVAlertKit/MLVAlertKit.h>
 
 @interface MLVViewController ()
 
@@ -67,9 +66,8 @@
         NSMutableAttributedString *description = [[NSMutableAttributedString alloc] initWithString:@"We’re here to provide tips, tricks, and helpful information when you need it most." attributes:attributes];
         [description setAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:30]} range:NSMakeRange(5, 5)];
         [description setAttributes:@{NSForegroundColorAttributeName : UIColor.redColor} range:NSMakeRange(13, 8)];
+
         MLVAlertAction *action1 = [MLVAlertAction actionWithAttributedTitle:description style:MLVAlertActionStyleDefault handler:^(MLVAlertAction * _Nonnull action) {
-            
-            [self.navigationController pushViewController:[[UIViewController alloc] init] animated:YES];
         }];
         
         [alert addAction:action1];
@@ -91,7 +89,12 @@
     [alert addAction:ok];
     [alert addAction:destructive];
     [alert addAction:cancel];
-
+    
+    if (alert.preferredStyle == MLVAlertControllerStyleAlert) {
+        [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.borderStyle = UITextBorderStyleRoundedRect;
+        }];
+    }
     
     [self presentViewController:alert animated:YES completion:NULL];
 }

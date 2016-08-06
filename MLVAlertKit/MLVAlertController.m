@@ -26,16 +26,19 @@
 #import "MLVAlertAnimator.h"
 
 #define MLVColorFromRGBHex(rgbValue) \
-[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 \
+alpha:1.0]
 
 
-static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColor *foregroundColor) {
+static NSDictionary * MLVTextAttributesFromStyleAndForegroundColor(NSString *style, UIColor *color) {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
-    return @{NSFontAttributeName : [UIFont preferredFontForTextStyle:preferredFontForTextStyle],
-             NSForegroundColorAttributeName : foregroundColor,
+    return @{NSFontAttributeName : [UIFont preferredFontForTextStyle:style],
+             NSForegroundColorAttributeName : color,
              NSParagraphStyleAttributeName : paragraphStyle};
 }
 
@@ -43,11 +46,18 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
 @interface MLVAlertAction ()
 
 @property (nonatomic, readwrite) NSString *title;
-@property (nonatomic, copy) NSAttributedString *attributedTitle;
-
 @property (nonatomic, readwrite) MLVAlertActionStyle style;
+@property (nonatomic, readwrite) void (^handler)(MLVAlertAction *);
 
-@property (nullable, nonatomic, readwrite) void (^handler)(MLVAlertAction *);
+/**
+ *  Extension property for MLVAlertControllerStyleAlert to add TextField, default nil
+ */
+@property (nonatomic, copy) void (^TextFieldConfiguration)(UITextField * _Nonnull);
+
+/**
+ *  The action attributed title
+ */
+@property (nonatomic, copy) NSAttributedString *__title;
 
 @end
 
@@ -57,25 +67,24 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
     
     NSAssert(title, @"Actions added to MLVAlertController must have a title");
     
-    MLVAlertAction *action = [[MLVAlertAction alloc] init];
-    if (action) {
-        action.title = title;
-        action.style = style;
-        action.handler = [handler copy];
-        action.enabled = YES;
-        
+    NSAttributedString *__title;
+    
+    if (title) {
         NSDictionary *attributes;
-        if (action.style == MLVAlertActionStyleDestructive) {
-            attributes = attributesWith(UIFontTextStyleBody, MLVColorFromRGBHex(0xA5000D));
+        if (style == MLVAlertActionStyleDestructive) {
+            attributes = MLVTextAttributesFromStyleAndForegroundColor(UIFontTextStyleBody, MLVColorFromRGBHex(0xA5000D));
         } else {
-            attributes = attributesWith(UIFontTextStyleBody, UIColor.blackColor);
+            attributes = MLVTextAttributesFromStyleAndForegroundColor(UIFontTextStyleBody, UIColor.blackColor);
         }
-        action.attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attributes];
+        
+        __title = [[NSAttributedString alloc] initWithString:title attributes:attributes];
     }
-    return action;
+    
+    return [MLVAlertAction actionWithAttributedTitle:__title style:style handler:handler];
 }
 
 + (instancetype)actionWithAttributedTitle:(NSAttributedString *)title style:(MLVAlertActionStyle)style handler:(void (^ __nullable)(MLVAlertAction *action))handler {
+    
     NSAssert(title, @"Actions added to MLVAlertController must have a title");
     
     MLVAlertAction *action = [[MLVAlertAction alloc] init];
@@ -84,58 +93,74 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
         action.style = style;
         action.handler = [handler copy];
         action.enabled = YES;
-        action.attributedTitle = title;
+        action.__title = title;
     }
     return action;
 }
+
 @end
 
 
-@interface MLVAlertController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UIViewControllerTransitioningDelegate>
+@interface MLVAlertController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UIViewControllerTransitioningDelegate>
 
-@property (nonatomic, strong) UIView *contentView;
-@property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) UIButton *cancelButton; // when MLVAlertControllerStyleActionSheet cancel button will be initialized, otherwise nil.
-
-@property (nonatomic, weak) NSLayoutConstraint *height;
-
-@property (nonatomic, readwrite) NSArray<MLVAlertAction *> *actions;
-
-@property (nonatomic, strong) NSMutableArray<MLVAlertAction *> *otherwiseActions;  // include the placeholder of title and message
-
-@property (nullable, nonatomic, copy, readwrite) NSString *message;
-
-@property (nonatomic, strong) UIColor *windowColor;
-
+@property (nonatomic, copy, readwrite) NSString *message;
 @property (nonatomic, readwrite) MLVAlertControllerStyle preferredStyle;
 
-@property (nonatomic, strong) UITapGestureRecognizer *assistantTapGesture; // when MLVAlertControllerStyleActionSheet tap gesture recognizer will be initialized, otherwise nil.
+@property (nonatomic, strong) UITableView *tableView;
 
+/**
+ *  The accessory button use to display an action of style MLVAlertActionStyleCancel, When MLVAlertController instance is an alert controller of style MLVAlertControllerStyleActionSheet, and the actions of this instance contains an action of style MLVAlertActionStyleCancel, the accessory button will be create, otherwise nil.
+ */
+@property (nonatomic, strong) UIButton *accessory;
+@property (nonatomic, strong) UIColor *windowColor;
+
+/**
+ *  The accessory tap
+ *  when MLVAlertController instance is an alert controller of style MLVAlertControllerStyleActionSheet, the accessory tap gesture recognizer will be create, otherwise nil.
+ *  The accessory tap use to dismiss MLVAlertController
+ */
+@property (nonatomic, strong) UITapGestureRecognizer *accessoryTap;
+
+@property (nonatomic, weak) NSLayoutConstraint *height;
+@property (nonatomic, readwrite) NSArray<MLVAlertAction *> *actions;
+@property (nullable, nonatomic, readwrite) NSArray<UITextField *> *textFields;
+
+/**
+ *  The title and message placeholder actions
+ */
+@property (nonatomic, strong) NSMutableArray<MLVAlertAction *> *accessoryActions;
+
+/**
+ *  The tableView cell height caches
+ */
+@property (nonatomic, strong) NSCache *heights;
+
+/**
+ *  The observers for UIKeyboard notications
+ */
+@property (nonatomic, strong) NSArray *observers;
+
+/**
+ *  A integer value that determines if the action of style cancel already been added
+ */
+@property (nonatomic, assign) NSInteger numberOfCancelActions;
 @end
+
 
 @implementation MLVAlertController
 - (void)dealloc {
     [self.tableView removeObserver:self forKeyPath:@"contentSize"];
-}
-
-- (void)initialize {
-    self.preferredStyle = MLVAlertControllerStyleActionSheet;
-    self.otherwiseActions = [[NSMutableArray alloc] init];
-    self.windowColor = [UIApplication sharedApplication].keyWindow.backgroundColor;
     
-    self.transitioningDelegate = self;
-    self.modalPresentationStyle = UIModalPresentationCustom;
+    [self removeObservers];
 }
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        [self initialize];
         
-        self.assistantTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                           action:@selector(dismiss)];
-        self.assistantTapGesture.delegate = self;
-        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.assistantTapGesture];
+        self.preferredStyle = MLVAlertControllerStyleActionSheet;
+        
+        [self initialize];
     }
     return self;
 }
@@ -147,29 +172,23 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
     self = [super init];
     
     if (self) {
-        [self initialize];
         
         self.title = title.string;
         self.message = message.string;
         self.preferredStyle = preferredStyle;
         
-        if (self.preferredStyle == MLVAlertControllerStyleActionSheet) {
-            self.assistantTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                               action:@selector(dismiss)];
-            self.assistantTapGesture.delegate = self;
-            [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.assistantTapGesture];
-        }
+        [self initialize];
         
         if (title) {
             MLVAlertAction *action = [MLVAlertAction actionWithAttributedTitle:title style:MLVAlertActionStyleDefault handler:nil];
             action.enabled = NO;
-            [self.otherwiseActions addObject:action];
+            [self.accessoryActions addObject:action];
         }
         
         if (message) {
             MLVAlertAction *action = [MLVAlertAction actionWithAttributedTitle:message style:MLVAlertActionStyleDefault handler:nil];
             action.enabled = NO;
-            [self.otherwiseActions addObject:action];
+            [self.accessoryActions addObject:action];
         }
     }
     return self;
@@ -179,20 +198,20 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
                                  message:(NSString *)message
                           preferredStyle:(MLVAlertControllerStyle)preferredStyle {
     
-    NSAttributedString *attributedTitle;
-    NSAttributedString *attributedMessage;
+    NSAttributedString *__title;
+    NSAttributedString *__message;
     
     if (title) {
-        NSDictionary *attributes = attributesWith(UIFontTextStyleHeadline, UIColor.whiteColor);
-        attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attributes];
+        NSDictionary *attributes = MLVTextAttributesFromStyleAndForegroundColor(UIFontTextStyleHeadline, UIColor.whiteColor);
+        __title = [[NSAttributedString alloc] initWithString:title attributes:attributes];
     }
     
     if (message) {
-        NSDictionary *attributes = attributesWith(UIFontTextStyleSubheadline, UIColor.blackColor);
-        attributedMessage = [[NSAttributedString alloc] initWithString:message attributes:attributes];
+        NSDictionary *attributes = MLVTextAttributesFromStyleAndForegroundColor(UIFontTextStyleSubheadline, UIColor.blackColor);
+        __message = [[NSAttributedString alloc] initWithString:message attributes:attributes];
     }
     
-    return [[MLVAlertController alloc] initWithAttributedTitle:attributedTitle message:attributedMessage preferredStyle:preferredStyle];
+    return [[MLVAlertController alloc] initWithAttributedTitle:__title message:__message preferredStyle:preferredStyle];
 }
 
 + (instancetype)alertControllerWithAttributedTitle:(NSAttributedString *)title
@@ -204,51 +223,25 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
                                                 preferredStyle:preferredStyle];
 }
 
-- (UITableView *)tableView {
-    if (_tableView) return _tableView;
+- (void)initialize {
+    self.accessoryActions = [[NSMutableArray alloc] init];
+    self.windowColor = [UIApplication sharedApplication].keyWindow.backgroundColor;
+    self.heights = [[NSCache alloc] init];
+    self.numberOfCancelActions = 0;
     
-    _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-    _tableView.translatesAutoresizingMaskIntoConstraints = NO;
-    _tableView.scrollEnabled = NO;
-    _tableView.layer.masksToBounds = YES;
-    _tableView.layer.cornerRadius = 10.0;
-    _tableView.bounces = NO;
-    _tableView.showsVerticalScrollIndicator = NO;
-    _tableView.separatorInset = UIEdgeInsetsZero;
-#if __IPHONE_8_0
-    if ([UIDevice currentDevice].systemVersion.doubleValue >= 8.0) {
-        _tableView.layoutMargins = UIEdgeInsetsZero;
-    }
-#endif
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    [_tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
-    return _tableView;
+    self.transitioningDelegate = self;
+    self.modalPresentationStyle = UIModalPresentationCustom;
+    
+    [self initializeAccessoryTapGestureRecognizer];
 }
 
-- (UIButton *)cancelButton {
-    if (_cancelButton) return _cancelButton;
-    
-    _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _cancelButton.translatesAutoresizingMaskIntoConstraints = NO;
-    _cancelButton.layer.masksToBounds = YES;
-    _cancelButton.layer.cornerRadius = 10.0;
-    _cancelButton.backgroundColor = UIColor.whiteColor;
-    [_cancelButton setTitle:self.otherwiseActions.lastObject.title forState:UIControlStateNormal];
-    [_cancelButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
-    [_cancelButton setTitleColor:MLVColorFromRGBHex(0xA5000D) forState:UIControlStateHighlighted];
-    [_cancelButton addTarget:self action:@selector(cancelActionHandler:) forControlEvents:UIControlEventTouchUpInside];
-    
-    CGRect rect = CGRectMake(0, 0, 1, 1);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, MLVColorFromRGBHex(0xFEDEE0).CGColor);
-    CGContextFillRect(context, rect);
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    [_cancelButton setBackgroundImage:image forState:UIControlStateHighlighted];
-    
-    return _cancelButton;
+- (void)initializeAccessoryTapGestureRecognizer {
+    if (self.preferredStyle == MLVAlertControllerStyleActionSheet) {
+        self.accessoryTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                    action:@selector(dismiss)];
+        self.accessoryTap.delegate = self;
+        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.accessoryTap];
+    }
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -258,77 +251,81 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
     return UIStatusBarStyleDefault;
 }
 
+- (void)loadView {
+    [super loadView];
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tableView.scrollEnabled = NO;
+    self.tableView.layer.masksToBounds = YES;
+    self.tableView.layer.cornerRadius = 10.0;
+    self.tableView.bounces = NO;
+    self.tableView.showsVerticalScrollIndicator = NO;
+    self.tableView.separatorInset = UIEdgeInsetsZero;
+    
+    if ([UIDevice currentDevice].systemVersion.doubleValue >= 8.0) {
+        self.tableView.layoutMargins = UIEdgeInsetsZero;
+    }
+    
+    [self.view addSubview:self.tableView];
+    
+    
+    if ([self needsAccessoryView]) {
+        
+        self.accessory = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.accessory.translatesAutoresizingMaskIntoConstraints = NO;
+        self.accessory.layer.masksToBounds = YES;
+        self.accessory.layer.cornerRadius = 10.0;
+        self.accessory.backgroundColor = UIColor.whiteColor;
+        [self.accessory setTitle:self.actions.lastObject.title forState:UIControlStateNormal];
+        [self.accessory setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+        [self.accessory setTitleColor:MLVColorFromRGBHex(0xA5000D) forState:UIControlStateHighlighted];
+        [self.accessory addTarget:self action:@selector(accessoryHandler:) forControlEvents:UIControlEventTouchUpInside];
+        
+        CGRect rect = CGRectMake(0, 0, 1, 1);
+        UIGraphicsBeginImageContext(rect.size);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetFillColorWithColor(context, MLVColorFromRGBHex(0xFEDEE0).CGColor);
+        CGContextFillRect(context, rect);
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        [self.accessory setBackgroundImage:image forState:UIControlStateHighlighted];
+        [self.accessory setBackgroundImage:image forState:UIControlStateSelected];
+        
+        [self.view addSubview:self.accessory];
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self.view addSubview:self.tableView];
-    
     [self updateViewLayout];
     
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:NSStringFromClass(UITableViewCell.class)];
     [self.tableView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
-}
-
-- (void)updateViewLayout {
-    self.height = [NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeHeight
-                                               relatedBy:NSLayoutRelationEqual
-                                                  toItem:nil
-                                               attribute:NSLayoutAttributeNotAnAttribute
-                                              multiplier:1.0
-                                                constant:44.0];
-    self.height.priority = UILayoutPriorityDefaultHigh;
-    self.height.active = YES;
     
-    
-    
-    if (self.preferredStyle == MLVAlertControllerStyleActionSheet
-        && self.otherwiseActions.lastObject.style == MLVAlertActionStyleCancel) {
-        
-        [self.view addSubview:self.cancelButton];
-    }
-    
-    NSArray *constraints = [self constraintsOfPreferredStyle:self.preferredStyle];
-    [NSLayoutConstraint activateConstraints:constraints];
-}
-
-- (NSArray *)constraintsOfPreferredStyle:(MLVAlertControllerStyle)preferredStyle {
-    NSMutableArray *constraints = NSMutableArray.new;
-    
-    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_tableView]|"
-                                                                             options:0 metrics:nil
-                                                                               views:NSDictionaryOfVariableBindings(_tableView)]];
-    
-    if (preferredStyle == MLVAlertControllerStyleAlert) {
-        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_tableView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_tableView)]];
-    } else {
-        
-        NSString *visualFormat = @"V:|[_tableView]-padding-|";
-        NSDictionary *views = NSDictionaryOfVariableBindings(_tableView);
-        
-        if (self.otherwiseActions.lastObject.style == MLVAlertActionStyleCancel) {
-            
-            visualFormat = @"V:|[_tableView]-padding-[_cancelButton(==44.0)]|";
-            views = NSDictionaryOfVariableBindings(_tableView, _cancelButton);
-            [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_cancelButton]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_cancelButton)]];
-        }
-        
-        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:visualFormat options:0 metrics:@{@"padding" : @(self.view.layoutMargins.bottom)} views:views]];
-    }
-    
-    return [NSArray arrayWithArray:constraints];
+    [self addObservers];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    NSAssert(self.otherwiseActions.count != 0, @"MLVAlertController must have a title, a message or an action to display");
+    NSAssert(self.accessoryActions.count != 0 || self.actions.count != 0, @"MLVAlertController must have a title, a message or an action to display");
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     if (self.preferredStyle == MLVAlertControllerStyleActionSheet) {
-        [self animationAppear];
+        [self animationAppearance];
+    }
+    
+    if (self.textFields.count != 0) {
+        [self.textFields.firstObject becomeFirstResponder];
     }
 }
 
@@ -338,7 +335,7 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
     [UIApplication sharedApplication].keyWindow.backgroundColor = self.windowColor;
     
     if (self.preferredStyle == MLVAlertControllerStyleActionSheet) {
-        [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.assistantTapGesture];
+        [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.accessoryTap];
     }
 }
 
@@ -347,72 +344,218 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
     // Dispose of any resources that can be recreated.
 }
 
+- (void)updateViewLayout {
+    self.height = [NSLayoutConstraint constraintWithItem:self.tableView
+                                               attribute:NSLayoutAttributeHeight
+                                               relatedBy:NSLayoutRelationEqual
+                                                  toItem:nil
+                                               attribute:NSLayoutAttributeNotAnAttribute
+                                              multiplier:1.0
+                                                constant:44.0];
+    self.height.priority = UILayoutPriorityDefaultHigh;
+    
+    NSMutableArray *constraints = NSMutableArray.new;
+    
+    NSString *visualFormat = @"H:|[_tableView]|";
+    NSDictionary *views = NSDictionaryOfVariableBindings(_tableView);
+    
+    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:visualFormat
+                                                                             options:0
+                                                                             metrics:nil
+                                                                               views:views]];
+    
+    if (self.preferredStyle == MLVAlertControllerStyleAlert) {
+        
+        visualFormat = @"V:|[_tableView]|";
+        
+        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:visualFormat
+                                                                                 options:0
+                                                                                 metrics:nil
+                                                                                   views:views]];
+        
+    } else {
+        
+        if ([self needsAccessoryView]) {
+            
+            visualFormat = @"H:|[_accessory]|";
+            views = NSDictionaryOfVariableBindings(_accessory);
+            [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:visualFormat
+                                                                                     options:0
+                                                                                     metrics:nil
+                                                                                       views:views]];
+            
+            visualFormat = @"V:|[_tableView]-padding-[_accessory(==44.0)]|";
+            views = NSDictionaryOfVariableBindings(_tableView, _accessory);
+            
+            [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:visualFormat
+                                                                                     options:0
+                                                                                     metrics:@{@"padding" : @(self.view.layoutMargins.bottom)}
+                                                                                       views:views]];
+            
+        } else {
+            visualFormat = @"V:|[_tableView]-padding-|";
+            views = NSDictionaryOfVariableBindings(_tableView);
+            [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:visualFormat
+                                                                                     options:0
+                                                                                     metrics:@{@"padding" : @(self.view.layoutMargins.bottom)}
+                                                                                       views:views]];
+        }
+    }
+    
+    if ([UIDevice currentDevice].systemVersion.doubleValue >= 8.0) {
+        self.height.active = YES;
+        [NSLayoutConstraint activateConstraints:constraints];
+    } else {
+        [self.tableView addConstraint:self.height];
+        [self.view addConstraints:constraints];
+    }
+}
+
 - (void)addAction:(MLVAlertAction *)action {
+    
+    if (action.style == MLVAlertActionStyleCancel) {
+        self.numberOfCancelActions += 1;
+    }
     
     NSMutableArray *actions = self.actions ? self.actions.mutableCopy : NSMutableArray.new;
     [actions addObject:action];
     
-    self.actions = [NSArray arrayWithArray:actions];
-    [self.otherwiseActions addObject:action];
-    
-    // move MLVAlertAction whitch style is MLVAlertActionStyleCancel to the last
-    [self.otherwiseActions enumerateObjectsUsingBlock:^(MLVAlertAction * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [actions enumerateObjectsUsingBlock:^(MLVAlertAction * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (obj.style == MLVAlertActionStyleCancel) {
-            [self.otherwiseActions removeObject:obj];
-            [self.otherwiseActions addObject:obj];
+            [actions removeObject:obj];
+            [actions addObject:obj];
+            
             *stop = YES;
         }
     }];
+    
+    NSAssert(self.numberOfCancelActions <= 1, @"MLVAlertController can only have one action with a style of UIAlertActionStyleCancel");
+    
+    self.actions = [NSArray arrayWithArray:actions];
 }
 
-#pragma mark - Additions for MLVAlertControllerStyleActionSheet
-- (void)animationAppear {
+- (void)addTextFieldWithConfigurationHandler:(void (^)(UITextField * _Nonnull))configurationHandler {
     
-    CGFloat destination = CGRectGetMinY(self.cancelButton.bounds);
+    NSAssert(self.preferredStyle == MLVAlertControllerStyleAlert, @"Text fields can only be added to an alert controller of style MLVAlertControllerStyleAlert");
+    
+    void (^TextFieldConfiguration)(UITextField * _Nonnull) = configurationHandler;
+    
+    UITextField *textField = [[UITextField alloc] init];
+    
+    textField.delegate = self;
+    
+    if (TextFieldConfiguration) {
+        TextFieldConfiguration(textField);
+    }
+    textField.translatesAutoresizingMaskIntoConstraints = NO;
+    NSMutableArray *textFields = self.textFields ? self.textFields.mutableCopy : NSMutableArray.new;
+    [textFields addObject:textField];
+    
+    self.textFields = [NSArray arrayWithArray:textFields];
+}
+
+- (BOOL)needsAccessoryView {
+    
+    return self.preferredStyle == MLVAlertControllerStyleActionSheet && self.actions.lastObject.style == MLVAlertActionStyleCancel;
+}
+
+#pragma mark - observers
+- (void)addObservers {
+    __weak typeof(self) weakSelf = self;
+    NSObject *oberser1 = [[NSNotificationCenter defaultCenter] addObserverForName:UIKeyboardDidShowNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        __strong typeof(self) self = weakSelf;
+        
+        if (CGRectGetHeight(self.view.bounds) < self.tableView.contentSize.height) {
+            self.tableView.scrollEnabled = YES;
+        } else {
+            self.tableView.scrollEnabled = NO;
+        }
+        
+    }];
+    
+    NSObject *oberser2 = [[NSNotificationCenter defaultCenter] addObserverForName:UIKeyboardDidHideNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        __strong typeof(self) self = weakSelf;
+        
+        if (CGRectGetHeight(self.view.bounds) > [UIScreen mainScreen].bounds.size.height) {
+            self.tableView.scrollEnabled = YES;
+        } else {
+            self.tableView.scrollEnabled = NO;
+        }
+    }];
+    
+    self.observers = @[oberser1, oberser2];
+}
+
+- (void)removeObservers {
+    [self.observers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[NSNotificationCenter defaultCenter] removeObserver:obj];
+    }];
+}
+
+- (void)animationAppearance {
+    
+    CGFloat destination = CGRectGetMinY(self.accessory.bounds);
     CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.y"];
     animation.duration = 0.6;
-    animation.values = @[@(CGRectGetMaxY(self.view.bounds)), @(destination + 3), @(destination - 3), @(destination + 2), @(destination - 1), @(destination)];
+    animation.values = @[@(CGRectGetMaxY(self.view.bounds)),
+                         @(destination + 3),
+                         @(destination - 3),
+                         @(destination + 2),
+                         @(destination - 1),
+                         @(destination)];
     animation.fillMode = kCAFillModeForwards;
     animation.removedOnCompletion = NO;
-    [self.cancelButton.layer addAnimation:animation forKey:@"kMLVKeyAnimationKey"];
+    
+    [self.accessory.layer addAnimation:animation forKey:@"kMLVKeyAnimationKey"];
 }
 
-// tap response
 - (void)dismiss {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)cancelActionHandler:(UIButton *)sender {
-    if (self.otherwiseActions.lastObject.style == MLVAlertActionStyleCancel) {
-        NSUInteger row = self.otherwiseActions.count - 1;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-        [self excuteSelectedActionHandlerAtIndexPath:indexPath];
-    }
+- (void)accessoryHandler:(UIButton *)sender {
+    
+    sender.selected = YES;
+    
+    NSUInteger row = self.accessoryActions.count + self.textFields.count + self.actions.count - 1;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+    
+    [self excuteSelectedActionHandlerAtIndexPath:indexPath];
 }
 
+#pragma mark - Action handler
 - (void)excuteSelectedActionHandlerAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row < self.otherwiseActions.count) {
+    
+    NSInteger index = indexPath.row - self.accessoryActions.count;
+    
+    if (self.accessoryActions <= indexPath.row && index < self.textFields.count) {
+        [self.view becomeFirstResponder];
+    }
+    
+    index = indexPath.row - self.accessoryActions.count - self.textFields.count;
+    
+    if (self.accessoryActions.count + self.textFields.count <= indexPath.row && index  < self.actions.count) {
         
-        MLVAlertAction *action = self.otherwiseActions[indexPath.row];
+        MLVAlertAction *action = self.actions[index];
         
-        if (![action.title isEqualToString:self.title] && ![action.title isEqualToString:self.message]) {
-            
-            [self dismissViewControllerAnimated:YES completion:^{
-                [UIApplication sharedApplication].keyWindow.backgroundColor = self.windowColor;
-                if (action.enabled) {
-                    void (^handler)(MLVAlertAction *) = action.handler;
-                    if (handler) {
-                        handler(action);
-                    }
+        [self dismissViewControllerAnimated:YES completion:^{
+            [UIApplication sharedApplication].keyWindow.backgroundColor = self.windowColor;
+            if (action.enabled) {
+                void (^handler)(MLVAlertAction *) = action.handler;
+                if (handler) {
+                    handler(action);
+                    handler = nil;
                 }
-            }];
-        }
+            }
+        }];
     }
 }
 
 #pragma mark - KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+    
     self.height.constant = self.tableView.contentSize.height;
+    
     if ([self.view systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height > [UIScreen mainScreen].bounds.size.height) {
         self.tableView.scrollEnabled = YES;
     } else {
@@ -422,7 +565,7 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
 
 #pragma mark - UIGesture recognizer
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if ([touch.view isDescendantOfView:self.tableView] && [gestureRecognizer isEqual:self.assistantTapGesture]) {
+    if ([touch.view isDescendantOfView:self.tableView] && [gestureRecognizer isEqual:self.accessoryTap]) {
         return NO;
     }
     return YES;
@@ -431,18 +574,18 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
 #pragma mark - UITable view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    // replace last cancel action to cancel button
-    if (self.otherwiseActions.lastObject.style == MLVAlertActionStyleCancel
-        && self.preferredStyle == MLVAlertControllerStyleActionSheet) {
-        return self.otherwiseActions.count - 1;
+    NSInteger number = self.accessoryActions.count + self.textFields.count + self.actions.count;
+    if ([self needsAccessoryView]) {
+        return number - 1;
     }
     
-    return self.otherwiseActions.count;
+    return number;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(UITableViewCell.class)
+                                                            forIndexPath:indexPath];
     
     [self configuration:cell atIndexPath:indexPath];
     
@@ -454,44 +597,99 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
     cell.textLabel.backgroundColor = UIColor.clearColor;
     cell.textLabel.numberOfLines = 0;
     cell.separatorInset = UIEdgeInsetsZero;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     cell.contentView.backgroundColor = UIColor.whiteColor;
     
-#if __IPHONE_8_0
     if ([UIDevice currentDevice].systemVersion.doubleValue >= 8.0) {
         cell.layoutMargins = UIEdgeInsetsZero;
     }
-#endif
     
     if (self.title && indexPath.row == 0) {
+        
         cell.contentView.backgroundColor = MLVColorFromRGBHex(0x377ADE);
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    MLVAlertAction *action = self.otherwiseActions[indexPath.row];
+    NSInteger index = indexPath.row;
     
-    if (![action.title isEqualToString:self.title] && ![action.title isEqualToString:self.message]) {
-        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+    if (index < self.accessoryActions.count) {
+        
+        MLVAlertAction *action = self.accessoryActions[index];
+        
+        cell.textLabel.attributedText = action.__title;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    if (action.style == MLVAlertActionStyleCancel) {
-        UIView *selectedBackgroundView = UIView.new;
-        selectedBackgroundView.backgroundColor = MLVColorFromRGBHex(0xFEDEE0);
-        cell.selectedBackgroundView = selectedBackgroundView;
-        cell.textLabel.highlightedTextColor = MLVColorFromRGBHex(0xA5000D);
-    } else if (action.style == MLVAlertActionStyleDestructive) {
-        cell.textLabel.textColor = UIColor.redColor;
+    index = indexPath.row - self.accessoryActions.count;
+    
+    if (self.accessoryActions.count <= indexPath.row && index < self.textFields.count) {
+        
+        __block BOOL containsTextField = NO;
+        
+        [cell.contentView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:UITextField.class]) {
+                containsTextField = YES;
+                *stop = YES;
+            }
+        }];
+        
+        if (!containsTextField) {
+            UITextField *textField = self.textFields[index];
+            
+            [cell.contentView addSubview:textField];
+            
+            NSMutableArray *constraints = NSMutableArray.new;
+            
+            [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-padding-[textField]-padding-|" options:0 metrics:@{@"padding" : @(self.view.layoutMargins.left / 2)} views:NSDictionaryOfVariableBindings(textField)]];
+            [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[textField]-padding-|" options:0 metrics:@{@"padding" : @(self.view.layoutMargins.left)} views:NSDictionaryOfVariableBindings(textField)]];
+            
+            if ([UIDevice currentDevice].systemVersion.doubleValue >= 8.0) {
+                [NSLayoutConstraint activateConstraints:constraints];
+            } else {
+                [cell.contentView addConstraints:constraints];
+            }
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    cell.textLabel.attributedText = action.attributedTitle;
+    index = indexPath.row - self.accessoryActions.count - self.textFields.count;
+    
+    if (self.accessoryActions.count + self.textFields.count <= indexPath.row && index < self.actions.count) {
+        
+        MLVAlertAction *action = self.actions[index];
+        
+        if (action.style == MLVAlertActionStyleCancel) {
+            
+            UIView *selectedBackgroundView = UIView.new;
+            selectedBackgroundView.backgroundColor = MLVColorFromRGBHex(0xFEDEE0);
+            
+            cell.selectedBackgroundView = selectedBackgroundView;
+            cell.textLabel.highlightedTextColor = MLVColorFromRGBHex(0xA5000D);
+            
+        } else if (action.style == MLVAlertActionStyleDestructive) {
+            
+            cell.textLabel.textColor = UIColor.redColor;
+        }
+        
+        cell.textLabel.attributedText = action.__title;
+    }
 }
 
 #pragma mark - UITable view delegate
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     
-    [self configuration:cell atIndexPath:indexPath];
+    if (![self.heights objectForKey:indexPath]) {
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(UITableViewCell.class)];
+        
+        [self configuration:cell atIndexPath:indexPath];
+        
+        CGFloat height = MAX(44.0, [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height);
+        
+        [self.heights setObject:@(height) forKey:indexPath];
+    }
     
-    return [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    return [[self.heights objectForKey:indexPath] floatValue];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -500,6 +698,12 @@ static NSDictionary * attributesWith(NSString *preferredFontForTextStyle, UIColo
     [self excuteSelectedActionHandlerAtIndexPath:indexPath];
 }
 
+#pragma mark - UITextField delegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    [textField resignFirstResponder];
+    return YES;
+}
 
 #pragma mark - UIViewControllerTransitioningDelegate
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented

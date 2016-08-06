@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B11BA3B41D50E3640085D202 /* MLVAlertKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B11BA3B31D50E3640085D202 /* MLVAlertKit.framework */; };
+		B1C91AF21D55E95100F06E95 /* MLVAlertKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1C91AF11D55E95100F06E95 /* MLVAlertKit.framework */; };
 		B1D28F4B1D50D0CB001B8AE9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D28F4A1D50D0CB001B8AE9 /* main.m */; };
 		B1D28F4E1D50D0CB001B8AE9 /* MLVAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D28F4D1D50D0CB001B8AE9 /* MLVAppDelegate.m */; };
 		B1D28F511D50D0CB001B8AE9 /* MLVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D28F501D50D0CB001B8AE9 /* MLVViewController.m */; };
@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B11BA3B31D50E3640085D202 /* MLVAlertKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MLVAlertKit.framework; path = "../build/Debug-iphoneos/MLVAlertKit.framework"; sourceTree = "<group>"; };
+		B1C91AF11D55E95100F06E95 /* MLVAlertKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MLVAlertKit.framework; path = "../build/Debug-iphoneos/MLVAlertKit.framework"; sourceTree = "<group>"; };
 		B1D28F461D50D0CB001B8AE9 /* MLVAlertKit Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MLVAlertKit Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1D28F4A1D50D0CB001B8AE9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B1D28F4C1D50D0CB001B8AE9 /* MLVAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MLVAppDelegate.h; sourceTree = "<group>"; };
@@ -35,7 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B11BA3B41D50E3640085D202 /* MLVAlertKit.framework in Frameworks */,
+				B1C91AF21D55E95100F06E95 /* MLVAlertKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,7 +45,7 @@
 		B1D28F3D1D50D0CB001B8AE9 = {
 			isa = PBXGroup;
 			children = (
-				B11BA3B31D50E3640085D202 /* MLVAlertKit.framework */,
+				B1C91AF11D55E95100F06E95 /* MLVAlertKit.framework */,
 				B1D28F481D50D0CB001B8AE9 /* MLVAlertKit Example */,
 				B1D28F491D50D0CB001B8AE9 /* Supporting Files */,
 				B1D28F471D50D0CB001B8AE9 /* Products */,
