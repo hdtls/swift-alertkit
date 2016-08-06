@@ -528,10 +528,6 @@ static NSDictionary * MLVTextAttributesFromStyleAndForegroundColor(NSString *sty
     
     NSInteger index = indexPath.row - self.accessoryActions.count;
     
-    if (self.accessoryActions <= indexPath.row && index < self.textFields.count) {
-        [self.view becomeFirstResponder];
-    }
-    
     index = indexPath.row - self.accessoryActions.count - self.textFields.count;
     
     if (self.accessoryActions.count + self.textFields.count <= indexPath.row && index  < self.actions.count) {
