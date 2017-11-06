@@ -8,11 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		B1361D5C1FB02C4900B2F5E8 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D5B1FB02C4900B2F5E8 /* Action.swift */; };
+		B1361D5E1FB0309900B2F5E8 /* Alarmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D5D1FB0309900B2F5E8 /* Alarmer.swift */; };
+		B1361D611FB030DB00B2F5E8 /* Proxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D5F1FB030DB00B2F5E8 /* Proxy.swift */; };
+		B1361D621FB030DB00B2F5E8 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D601FB030DB00B2F5E8 /* Reusable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B11BA3C11D50E9CF0085D202 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Supporting Files/Info.plist"; sourceTree = SOURCE_ROOT; };
 		B1361D5B1FB02C4900B2F5E8 /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		B1361D5D1FB0309900B2F5E8 /* Alarmer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alarmer.swift; sourceTree = "<group>"; };
+		B1361D5F1FB030DB00B2F5E8 /* Proxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Proxy.swift; sourceTree = "<group>"; };
+		B1361D601FB030DB00B2F5E8 /* Reusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		B1D28F291D50CEC5001B8AE9 /* AlertKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AlertKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -47,6 +53,9 @@
 		B1D28F2B1D50CEC5001B8AE9 /* AlertKit */ = {
 			isa = PBXGroup;
 			children = (
+				B1361D5D1FB0309900B2F5E8 /* Alarmer.swift */,
+				B1361D5F1FB030DB00B2F5E8 /* Proxy.swift */,
+				B1361D601FB030DB00B2F5E8 /* Reusable.swift */,
 				B1361D5B1FB02C4900B2F5E8 /* Action.swift */,
 			);
 			path = AlertKit;
@@ -139,6 +148,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1361D621FB030DB00B2F5E8 /* Reusable.swift in Sources */,
+				B1361D5E1FB0309900B2F5E8 /* Alarmer.swift in Sources */,
+				B1361D611FB030DB00B2F5E8 /* Proxy.swift in Sources */,
 				B1361D5C1FB02C4900B2F5E8 /* Action.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
