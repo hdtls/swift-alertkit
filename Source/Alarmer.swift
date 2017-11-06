@@ -24,27 +24,28 @@
 
 import UIKit
 
-
 /// Enum that specifies the style of the alert controller
-public enum AlarmerStyle: Int {
+@objc(MLVAlarmerStyle) public enum AlarmerStyle: Int {
     case actionSheet
     case alert
 }
 
-open class Alarmer: UIViewController {
+@objc(MLVAlarmerController) open class Alarmer: UIViewController {
     
     /// The style for Alarmer instance
-    open let preferredStyle: AlarmerStyle
+    @objc open let preferredStyle: AlarmerStyle
     
     /// The textFields added to the Alarmer instance
-    open var textFields: [UITextField] { return _textFields }
+    @objc open var textFields: [UITextField] { return _textFields }
 
     /// The actions added to the Alarmer instance
-    open var actions: [Action] { return _actions }
-
+    @objc open var actions: [Action] { return _actions }
+    
     /// The message for Alarmer instance
-    open var message: String?
-    open var tintColor: UIColor? = #colorLiteral(red: 0.268933624, green: 0.5639741421, blue: 0.8968726397, alpha: 1) {
+    @objc open var message: String?
+    
+    /// The backgoundColor of title view
+    @objc open var tintColor: UIColor? = #colorLiteral(red: 0.268933624, green: 0.5639741421, blue: 0.8968726397, alpha: 1) {
         didSet {
             _tableView.reloadData()
         }
@@ -71,7 +72,7 @@ open class Alarmer: UIViewController {
         accessoryView.isHidden = true
         return accessoryView
     }()
-
+    
     deinit {
         _observations.forEach {
             if !($0 is NSKeyValueObservation) {
@@ -81,7 +82,7 @@ open class Alarmer: UIViewController {
         _observations.removeAll()
     }
     
-    public convenience init() {
+    @objc public convenience init() {
         self.init(attributedTitle: nil, message: nil, preferredStyle: .actionSheet)
     }
     
@@ -91,35 +92,16 @@ open class Alarmer: UIViewController {
     ///   - title: The title that Alarmer will display
     ///   - message: The message that Alarmer will display
     ///   - preferredStyle: See enum 'AlarmerStyle' for more info
-    public convenience init(title: String?, message: String?, preferredStyle: AlarmerStyle) {
+    @objc public convenience init(title: String?, message: String?, preferredStyle: AlarmerStyle) {
         
-        var attributedTitle: NSAttributedString?
-        if title != nil {
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = .center
-            
-            let attributes: [NSAttributedStringKey : Any] = [
-                .font : UIFont.preferredFont(forTextStyle: .headline),
-                .foregroundColor : UIColor.white,
-                .paragraphStyle : paragraphStyle
-            ]
-            attributedTitle = NSAttributedString.init(string: title!, attributes: attributes)
-        }
+        let _title = title == nil
+            ? nil : NSAttributedString(string: title!, attributes: Alarmer.textAttributes(withTextStyle: .headline, foregroundColor: .white))
+        let _message = message == nil
+            ? nil : NSAttributedString(string: message!, attributes: Alarmer.textAttributes(withTextStyle: .body, foregroundColor: .black))
         
-        var attributedMessage: NSAttributedString?
-        if message != nil {
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.alignment = .center
-            
-            let attributes: [NSAttributedStringKey : Any] = [
-                .font : UIFont.preferredFont(forTextStyle: .subheadline),
-                .foregroundColor : UIColor.black,
-                .paragraphStyle : paragraphStyle
-            ]
-            attributedMessage = NSAttributedString.init(string: message!, attributes: attributes)
-        }
-        
-        self.init(attributedTitle: attributedTitle, message: attributedMessage, preferredStyle: preferredStyle)
+        self.init(attributedTitle: _title,
+                  message: _message,
+                  preferredStyle: preferredStyle)
     }
     
     
@@ -129,7 +111,7 @@ open class Alarmer: UIViewController {
     ///   - attributedTitle: The attributed title that Alarmer will display
     ///   - message: The attributed message that Alarmer will display
     ///   - preferredStyle: See enum 'AlarmerStyle' for more info
-    public init(attributedTitle: NSAttributedString?, message: NSAttributedString?, preferredStyle: AlarmerStyle) {
+    @objc public init(attributedTitle: NSAttributedString?, message: NSAttributedString?, preferredStyle: AlarmerStyle) {
         self.preferredStyle = preferredStyle
         
         super.init(nibName: nil, bundle: nil)
@@ -403,7 +385,7 @@ open class Alarmer: UIViewController {
     /// Adds a new action to the Alarmer instance
     ///
     /// - Parameter action: The Action that will add to Alarmer instance
-    open func addAction(_ action: Action) {
+    @objc open func addAction(_ action: Action) {
         _actions.append(action)
 
         guard _actions.filter({ $0.style == .cancel }).count < 2 else {
@@ -428,7 +410,7 @@ open class Alarmer: UIViewController {
     /// Adds a new TextField to the Alarmer instance, AlarmerStyleAlert only
     ///
     /// - Parameter handler: The configuration handler block for textFiled
-    open func addTextField(withConfiguration handler: (UITextField) -> Void) {
+    @objc open func addTextField(withConfiguration handler: (UITextField) -> Void) {
         assert(preferredStyle == .alert, "Text fields can only be added to an alarmer of style alert")
         
         let textField = UITextField()
@@ -466,6 +448,18 @@ open class Alarmer: UIViewController {
             _proxy.models.append($0)
         }
         _tableView.reloadData()
+    }
+    
+    static func textAttributes(withTextStyle style: UIFontTextStyle = .headline, foregroundColor: UIColor = .white)
+        -> [NSAttributedStringKey : Any] {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        
+        return [
+            .font : UIFont.preferredFont(forTextStyle: style),
+            .foregroundColor : foregroundColor,
+            .paragraphStyle : paragraphStyle
+        ]
     }
 }
 

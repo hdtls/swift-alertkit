@@ -24,8 +24,8 @@
 
 import UIKit
 
-public class Animator: NSObject {
-    open let preferredStyle: AlarmerStyle
+@objc(MLVAnimator) open class Animator: NSObject {
+    @objc open let preferredStyle: AlarmerStyle
     
     private var toViewYArchor: NSLayoutConstraint?
     private var observations: [NSObjectProtocol]?
@@ -37,7 +37,7 @@ public class Animator: NSObject {
         observations = nil
     }
     
-    init(preferredStyle: AlarmerStyle) {
+    @objc public init(preferredStyle: AlarmerStyle) {
         self.preferredStyle = preferredStyle
     }
 }

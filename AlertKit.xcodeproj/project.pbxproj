@@ -151,6 +151,7 @@
 		B1D28F201D50CEC5001B8AE9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0910;
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = NEET;
 				TargetAttributes = {
@@ -166,6 +167,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = B1D28F1F1D50CEC5001B8AE9;
 			productRefGroup = B1D28F2A1D50CEC5001B8AE9 /* Products */;
