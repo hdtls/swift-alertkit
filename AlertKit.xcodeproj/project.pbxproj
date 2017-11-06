@@ -7,22 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B11BA3BC1D50E9C60085D202 /* MLVAlertAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = B11BA3B71D50E9C60085D202 /* MLVAlertAnimator.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B11BA3BD1D50E9C60085D202 /* MLVAlertAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = B11BA3B81D50E9C60085D202 /* MLVAlertAnimator.m */; };
-		B11BA3BE1D50E9C60085D202 /* MLVAlertController.h in Headers */ = {isa = PBXBuildFile; fileRef = B11BA3B91D50E9C60085D202 /* MLVAlertController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B11BA3BF1D50E9C60085D202 /* MLVAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = B11BA3BA1D50E9C60085D202 /* MLVAlertController.m */; };
-		B11BA3C01D50E9C60085D202 /* MLVAlertKit.h in Headers */ = {isa = PBXBuildFile; fileRef = B11BA3BB1D50E9C60085D202 /* MLVAlertKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B11BA3C21D50E9CF0085D202 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B11BA3C11D50E9CF0085D202 /* Info.plist */; };
+		B1361D5C1FB02C4900B2F5E8 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D5B1FB02C4900B2F5E8 /* Action.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B11BA3B71D50E9C60085D202 /* MLVAlertAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLVAlertAnimator.h; sourceTree = "<group>"; };
-		B11BA3B81D50E9C60085D202 /* MLVAlertAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLVAlertAnimator.m; sourceTree = "<group>"; };
-		B11BA3B91D50E9C60085D202 /* MLVAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLVAlertController.h; sourceTree = "<group>"; };
-		B11BA3BA1D50E9C60085D202 /* MLVAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLVAlertController.m; sourceTree = "<group>"; };
-		B11BA3BB1D50E9C60085D202 /* MLVAlertKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLVAlertKit.h; sourceTree = "<group>"; };
 		B11BA3C11D50E9CF0085D202 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Supporting Files/Info.plist"; sourceTree = SOURCE_ROOT; };
-		B1D28F291D50CEC5001B8AE9 /* MLVAlertKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MLVAlertKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1361D5B1FB02C4900B2F5E8 /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		B1D28F291D50CEC5001B8AE9 /* AlertKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AlertKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,7 +30,7 @@
 		B1D28F1F1D50CEC5001B8AE9 = {
 			isa = PBXGroup;
 			children = (
-				B1D28F2B1D50CEC5001B8AE9 /* MLVAlertKit */,
+				B1D28F2B1D50CEC5001B8AE9 /* AlertKit */,
 				B1D28F3C1D50CEE5001B8AE9 /* Supporting Files */,
 				B1D28F2A1D50CEC5001B8AE9 /* Products */,
 			);
@@ -48,21 +39,17 @@
 		B1D28F2A1D50CEC5001B8AE9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B1D28F291D50CEC5001B8AE9 /* MLVAlertKit.framework */,
+				B1D28F291D50CEC5001B8AE9 /* AlertKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B1D28F2B1D50CEC5001B8AE9 /* MLVAlertKit */ = {
+		B1D28F2B1D50CEC5001B8AE9 /* AlertKit */ = {
 			isa = PBXGroup;
 			children = (
-				B11BA3B71D50E9C60085D202 /* MLVAlertAnimator.h */,
-				B11BA3B81D50E9C60085D202 /* MLVAlertAnimator.m */,
-				B11BA3B91D50E9C60085D202 /* MLVAlertController.h */,
-				B11BA3BA1D50E9C60085D202 /* MLVAlertController.m */,
-				B11BA3BB1D50E9C60085D202 /* MLVAlertKit.h */,
+				B1361D5B1FB02C4900B2F5E8 /* Action.swift */,
 			);
-			path = MLVAlertKit;
+			path = AlertKit;
 			sourceTree = "<group>";
 		};
 		B1D28F3C1D50CEE5001B8AE9 /* Supporting Files */ = {
@@ -81,18 +68,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B11BA3C01D50E9C60085D202 /* MLVAlertKit.h in Headers */,
-				B11BA3BC1D50E9C60085D202 /* MLVAlertAnimator.h in Headers */,
-				B11BA3BE1D50E9C60085D202 /* MLVAlertController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		B1D28F281D50CEC5001B8AE9 /* MLVAlertKit */ = {
+		B1D28F281D50CEC5001B8AE9 /* AlertKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B1D28F311D50CEC5001B8AE9 /* Build configuration list for PBXNativeTarget "MLVAlertKit" */;
+			buildConfigurationList = B1D28F311D50CEC5001B8AE9 /* Build configuration list for PBXNativeTarget "AlertKit" */;
 			buildPhases = (
 				B1D28F241D50CEC5001B8AE9 /* Sources */,
 				B1D28F251D50CEC5001B8AE9 /* Frameworks */,
@@ -103,9 +87,9 @@
 			);
 			dependencies = (
 			);
-			name = MLVAlertKit;
+			name = AlertKit;
 			productName = MLVAlertKit;
-			productReference = B1D28F291D50CEC5001B8AE9 /* MLVAlertKit.framework */;
+			productReference = B1D28F291D50CEC5001B8AE9 /* AlertKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -114,15 +98,16 @@
 		B1D28F201D50CEC5001B8AE9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = NEET;
 				TargetAttributes = {
 					B1D28F281D50CEC5001B8AE9 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = "";
 					};
 				};
 			};
-			buildConfigurationList = B1D28F231D50CEC5001B8AE9 /* Build configuration list for PBXProject "MLVAlertKit" */;
+			buildConfigurationList = B1D28F231D50CEC5001B8AE9 /* Build configuration list for PBXProject "AlertKit" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -134,7 +119,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B1D28F281D50CEC5001B8AE9 /* MLVAlertKit */,
+				B1D28F281D50CEC5001B8AE9 /* AlertKit */,
 			);
 		};
 /* End PBXProject section */
@@ -144,7 +129,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B11BA3C21D50E9CF0085D202 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,8 +139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B11BA3BF1D50E9C60085D202 /* MLVAlertController.m in Sources */,
-				B11BA3BD1D50E9C60085D202 /* MLVAlertAnimator.m in Sources */,
+				B1361D5C1FB02C4900B2F5E8 /* Action.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,13 +155,21 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -220,13 +211,21 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -246,6 +245,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -256,7 +256,9 @@
 		B1D28F321D50CEC5001B8AE9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -268,13 +270,17 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.neet.MLVAlertKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
 		B1D28F331D50CEC5001B8AE9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -286,13 +292,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.neet.MLVAlertKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B1D28F231D50CEC5001B8AE9 /* Build configuration list for PBXProject "MLVAlertKit" */ = {
+		B1D28F231D50CEC5001B8AE9 /* Build configuration list for PBXProject "AlertKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B1D28F2F1D50CEC5001B8AE9 /* Debug */,
@@ -301,7 +308,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B1D28F311D50CEC5001B8AE9 /* Build configuration list for PBXNativeTarget "MLVAlertKit" */ = {
+		B1D28F311D50CEC5001B8AE9 /* Build configuration list for PBXNativeTarget "AlertKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B1D28F321D50CEC5001B8AE9 /* Debug */,
