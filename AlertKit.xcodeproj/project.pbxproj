@@ -7,18 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B1361D5C1FB02C4900B2F5E8 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D5B1FB02C4900B2F5E8 /* Action.swift */; };
-		B1361D5E1FB0309900B2F5E8 /* Alarmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D5D1FB0309900B2F5E8 /* Alarmer.swift */; };
-		B1361D611FB030DB00B2F5E8 /* Proxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D5F1FB030DB00B2F5E8 /* Proxy.swift */; };
-		B1361D621FB030DB00B2F5E8 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D601FB030DB00B2F5E8 /* Reusable.swift */; };
+		B1361D721FB0377400B2F5E8 /* AlertKit.h in Headers */ = {isa = PBXBuildFile; fileRef = B1361D6B1FB0377400B2F5E8 /* AlertKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B1361D861FB039DD00B2F5E8 /* Alarmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D811FB039DD00B2F5E8 /* Alarmer.swift */; };
+		B1361D871FB039DD00B2F5E8 /* Proxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D821FB039DD00B2F5E8 /* Proxy.swift */; };
+		B1361D881FB039DD00B2F5E8 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D831FB039DD00B2F5E8 /* Reusable.swift */; };
+		B1361D891FB039DD00B2F5E8 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D841FB039DD00B2F5E8 /* Action.swift */; };
+		B1361D8A1FB039DD00B2F5E8 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D851FB039DD00B2F5E8 /* Animator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B11BA3C11D50E9CF0085D202 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Supporting Files/Info.plist"; sourceTree = SOURCE_ROOT; };
-		B1361D5B1FB02C4900B2F5E8 /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
-		B1361D5D1FB0309900B2F5E8 /* Alarmer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alarmer.swift; sourceTree = "<group>"; };
-		B1361D5F1FB030DB00B2F5E8 /* Proxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Proxy.swift; sourceTree = "<group>"; };
-		B1361D601FB030DB00B2F5E8 /* Reusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
+		B1361D6B1FB0377400B2F5E8 /* AlertKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertKit.h; sourceTree = "<group>"; };
+		B1361D6D1FB0377400B2F5E8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B1361D791FB0381700B2F5E8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		B1361D7B1FB0383700B2F5E8 /* AlertKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AlertKit.podspec; sourceTree = SOURCE_ROOT; };
+		B1361D7C1FB0383700B2F5E8 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
+		B1361D811FB039DD00B2F5E8 /* Alarmer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alarmer.swift; sourceTree = "<group>"; };
+		B1361D821FB039DD00B2F5E8 /* Proxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Proxy.swift; sourceTree = "<group>"; };
+		B1361D831FB039DD00B2F5E8 /* Reusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
+		B1361D841FB039DD00B2F5E8 /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		B1361D851FB039DD00B2F5E8 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		B1D28F291D50CEC5001B8AE9 /* AlertKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AlertKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -33,11 +40,67 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B1361D681FB0377400B2F5E8 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				B1361D801FB0397800B2F5E8 /* Core */,
+				B1361D8C1FB03A9D00B2F5E8 /* Features */,
+				B1361D7F1FB0393800B2F5E8 /* Supporting Files */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		B1361D771FB037F300B2F5E8 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				B1361D7B1FB0383700B2F5E8 /* AlertKit.podspec */,
+				B1361D7C1FB0383700B2F5E8 /* LICENSE */,
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+		B1361D781FB037F600B2F5E8 /* Deployment */ = {
+			isa = PBXGroup;
+			children = (
+				B1361D791FB0381700B2F5E8 /* README.md */,
+			);
+			name = Deployment;
+			sourceTree = "<group>";
+		};
+		B1361D7F1FB0393800B2F5E8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B1361D6B1FB0377400B2F5E8 /* AlertKit.h */,
+				B1361D6D1FB0377400B2F5E8 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B1361D801FB0397800B2F5E8 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				B1361D841FB039DD00B2F5E8 /* Action.swift */,
+				B1361D811FB039DD00B2F5E8 /* Alarmer.swift */,
+				B1361D851FB039DD00B2F5E8 /* Animator.swift */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		B1361D8C1FB03A9D00B2F5E8 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				B1361D821FB039DD00B2F5E8 /* Proxy.swift */,
+				B1361D831FB039DD00B2F5E8 /* Reusable.swift */,
+			);
+			name = Features;
+			sourceTree = "<group>";
+		};
 		B1D28F1F1D50CEC5001B8AE9 = {
 			isa = PBXGroup;
 			children = (
-				B1D28F2B1D50CEC5001B8AE9 /* AlertKit */,
-				B1D28F3C1D50CEE5001B8AE9 /* Supporting Files */,
+				B1361D781FB037F600B2F5E8 /* Deployment */,
+				B1361D771FB037F300B2F5E8 /* Documentation */,
+				B1361D681FB0377400B2F5E8 /* Source */,
 				B1D28F2A1D50CEC5001B8AE9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,26 +113,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B1D28F2B1D50CEC5001B8AE9 /* AlertKit */ = {
-			isa = PBXGroup;
-			children = (
-				B1361D5D1FB0309900B2F5E8 /* Alarmer.swift */,
-				B1361D5F1FB030DB00B2F5E8 /* Proxy.swift */,
-				B1361D601FB030DB00B2F5E8 /* Reusable.swift */,
-				B1361D5B1FB02C4900B2F5E8 /* Action.swift */,
-			);
-			path = AlertKit;
-			sourceTree = "<group>";
-		};
-		B1D28F3C1D50CEE5001B8AE9 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				B11BA3C11D50E9CF0085D202 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			path = MLVAlertKit;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -77,6 +120,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1361D721FB0377400B2F5E8 /* AlertKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,7 +156,7 @@
 				TargetAttributes = {
 					B1D28F281D50CEC5001B8AE9 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = "";
+						LastSwiftMigration = 0910;
 					};
 				};
 			};
@@ -148,10 +192,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1361D621FB030DB00B2F5E8 /* Reusable.swift in Sources */,
-				B1361D5E1FB0309900B2F5E8 /* Alarmer.swift in Sources */,
-				B1361D611FB030DB00B2F5E8 /* Proxy.swift in Sources */,
-				B1361D5C1FB02C4900B2F5E8 /* Action.swift in Sources */,
+				B1361D8A1FB039DD00B2F5E8 /* Animator.swift in Sources */,
+				B1361D881FB039DD00B2F5E8 /* Reusable.swift in Sources */,
+				B1361D891FB039DD00B2F5E8 /* Action.swift in Sources */,
+				B1361D871FB039DD00B2F5E8 /* Proxy.swift in Sources */,
+				B1361D861FB039DD00B2F5E8 /* Alarmer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,11 +320,11 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Supporting Files/Info.plist";
+				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.neet.MLVAlertKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.neet.AlertKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -297,11 +342,11 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Supporting Files/Info.plist";
+				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.neet.MLVAlertKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.neet.AlertKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;

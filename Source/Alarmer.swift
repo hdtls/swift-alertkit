@@ -24,6 +24,7 @@
 
 import UIKit
 
+
 /// Enum that specifies the style of the alert controller
 public enum AlarmerStyle: Int {
     case actionSheet
@@ -80,7 +81,7 @@ open class Alarmer: UIViewController {
         _observations.removeAll()
     }
     
-    @objc public convenience init() {
+    public convenience init() {
         self.init(attributedTitle: nil, message: nil, preferredStyle: .actionSheet)
     }
     
@@ -167,9 +168,8 @@ open class Alarmer: UIViewController {
             _extras.append(additionalAction)
         }
         
-        if preferredStyle == .actionSheet {
-            // dismiss gesture
-        }
+        transitioningDelegate = _proxy
+        modalPresentationStyle = .custom
     }
     
     required public init?(coder aDecoder: NSCoder) {
