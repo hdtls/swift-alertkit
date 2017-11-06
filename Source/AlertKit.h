@@ -1,7 +1,7 @@
 //
-//  MLVAppDelegate.h
+//  AlertKit.h
 //
-//  Copyright (c) 2016 NEET. All rights reserved.
+//  Copyright (c) 2017 NEET. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MLVAppDelegate : UIResponder <UIApplicationDelegate>
+//! Project version number for AlertKit.
+FOUNDATION_EXPORT double AlertKitVersionNumber;
 
-@property (strong, nonatomic) UIWindow *window;
+//! Project version string for AlertKit.
+FOUNDATION_EXPORT const unsigned char AlertKitVersionString[];
 
+// In this header, you should import all the public headers of your framework using statements like #import <AlertKit/PublicHeader.h>
 
-@end
 

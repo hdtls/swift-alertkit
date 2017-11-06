@@ -57,3 +57,13 @@ extension DelegateProxy: UITextFieldDelegate {
         return textFieldReturn?(textField) ?? true
     }
 }
+
+extension DelegateProxy: UIViewControllerTransitioningDelegate {
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return Animator.init(preferredStyle: preferredStyle)
+    }
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return Animator.init(preferredStyle: preferredStyle)
+    }
+}
