@@ -22,27 +22,21 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
-import UIKit.UIFont
-import UIKit.NSParagraphStyle
-import UIKit.UIColor
+import UIKit
 
 /// Enum that specifies the style of the actions
-public enum ActionStyle: Int {
+@objc(MLVAlertActionStyle) public enum ActionStyle: Int {
     case `default`
     case cancel
     case destructive
 }
 
-public class Action: NSObject {
-    public let title: String
-    public let attributedTitle: NSAttributedString
-
+@objc(MLVAlertAction) public class Action: NSObject {
+    @objc public let title: String
+    @objc public let attributedTitle: NSAttributedString
+    @objc public var isEnabled: Bool = true
+    @objc public let style: ActionStyle
     var handler: ((Action) -> Void)? = nil
-    
-    public var isEnabled: Bool = true
-    public let style: ActionStyle
-    
     
     /// Initialize a action by given it's title, style and handler
     ///
@@ -50,16 +44,8 @@ public class Action: NSObject {
     ///   - title: The title that action will display
     ///   - style: The style of the action
     ///   - handler: The action handler for action, a block that will be fired when action selected
-    public convenience init(title: String, style: ActionStyle, handler: ((Action) -> Void)?) {
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        
-        let attributes: [NSAttributedStringKey : Any] = [
-            .font : UIFont.preferredFont(forTextStyle: .body),
-            .foregroundColor : style == .destructive ? #colorLiteral(red: 0.6470588235, green: 0, blue: 0.05098039216, alpha: 1) : .black,
-            .paragraphStyle : paragraphStyle
-        ]
-        
+    @objc public convenience init(title: String, style: ActionStyle, handler: ((Action) -> Void)?) {
+        let attributes = Alarmer.textAttributes(withTextStyle: .body, foregroundColor: style == .destructive ? #colorLiteral(red: 0.6470588235, green: 0, blue: 0.05098039216, alpha: 1) : .black)
         self.init(attributedTitle: NSAttributedString.init(string: title, attributes: attributes), style: style, handler: handler)
     }
     
@@ -69,7 +55,7 @@ public class Action: NSObject {
     ///   - attributedTitle: The attributed title that action will display
     ///   - style: The style of the action
     ///   - handler: The action handler for action, a block that will be fired when action selected
-    public init(attributedTitle: NSAttributedString, style: ActionStyle, handler: ((Action) -> Void)?) {
+    @objc public init(attributedTitle: NSAttributedString, style: ActionStyle, handler: ((Action) -> Void)?) {
         self.style = style
         self.attributedTitle = attributedTitle
         self.title = attributedTitle.string

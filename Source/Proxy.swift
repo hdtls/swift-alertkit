@@ -22,9 +22,7 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
-import UIKit.UITableView
-import UIKit.UITextField
+import UIKit
 
 class DelegateProxy: NSObject {
     

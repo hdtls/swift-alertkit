@@ -24,10 +24,10 @@
 
 import UIKit
 
-public protocol Reusable: class {
+protocol Reusable: class {
     static var reuseIdentifier: String { get }
 }
-public extension Reusable {
+extension Reusable {
     static var reuseIdentifier: String {
         return String(describing: self)
     }
