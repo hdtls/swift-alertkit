@@ -35,6 +35,14 @@ class DelegateProxy: NSObject {
 
 extension DelegateProxy: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        let contains = models.contains {
+            guard let model = $0 as? Action, model.style == .cancel else { return false }
+            return true
+        }
+        if preferredStyle == .actionSheet && contains {
+            return models.count - 1
+        }
         return models.count
     }
     
