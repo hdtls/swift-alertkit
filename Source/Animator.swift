@@ -24,11 +24,11 @@
 
 import UIKit
 
-@objc(MLVAnimator) open class Animator: NSObject {
-    @objc open let preferredStyle: AlarmerStyle
+open class Animator: NSObject {
+    public let preferredStyle: AlarmerStyle
     
-    private var toViewYArchor: NSLayoutConstraint?
-    private var observations: [NSObjectProtocol]?
+    fileprivate var toViewYArchor: NSLayoutConstraint?
+    fileprivate var observations: [NSObjectProtocol]?
     
     deinit {
         observations?.forEach {
@@ -37,7 +37,7 @@ import UIKit
         observations = nil
     }
     
-    @objc public init(preferredStyle: AlarmerStyle) {
+    public init(preferredStyle: AlarmerStyle) {
         self.preferredStyle = preferredStyle
     }
 }
@@ -57,6 +57,7 @@ extension Animator: UIViewControllerAnimatedTransitioning {
         var dimmingView: UIView?
         let duration: TimeInterval = transitionDuration(using: transitionContext)
         
+        // Present
         if let toVc = transitionContext.viewController(forKey: .to), toVc.isBeingPresented {
             
             let fromView = transitionContext.view(forKey: .from) ?? transitionContext.viewController(forKey: .from)?.view
@@ -95,7 +96,7 @@ extension Animator: UIViewControllerAnimatedTransitioning {
                 
                 NSLayoutConstraint.activate(constraints)
                 
-                // MARK: Adjust keyboard appearance
+                // Keyboard appearance
                 observations = [
                     NotificationCenter.default.addObserver(forName: .UIKeyboardWillShow, object: nil, queue: nil, using: { [weak self](note) in
                         let duration = note.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
@@ -114,7 +115,6 @@ extension Animator: UIViewControllerAnimatedTransitioning {
                     })
                 ]
                 
-                // MARK: Animations
                 toView.layer.transform = CATransform3DMakeScale(0.5, 0.5, 1.1)
                 UIView.animateKeyframes(withDuration: duration, delay: 0, options: .allowUserInteraction, animations: {
                     UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.5, animations: {
@@ -136,20 +136,27 @@ extension Animator: UIViewControllerAnimatedTransitioning {
                 )
                 NSLayoutConstraint.activate(constraints)
                 
-                // MARK: Animations
                 toView.frame.origin.y = container.bounds.maxY
                 UIView.animate(withDuration: duration, delay: 0, options: [.allowUserInteraction, .curveEaseInOut], animations: {
-                    fromView?.layer.transform = CATransform3DMakeScale(0.9, 0.9, 0.9)
                     toView.frame.origin.y = container.bounds.midY
                     dimmingView?.layer.opacity = 1
                 }, completion: { (flag) in
                     transitionContext.completeTransition(flag)
                 })
+                
+                let transform = CABasicAnimation.init(keyPath: "transform")
+                transform.duration = duration
+                transform.fillMode = kCAFillModeForwards
+                transform.isRemovedOnCompletion = false
+                transform.fromValue = CATransform3DIdentity
+                transform.toValue = CATransform3DMakeScale(0.9, 0.9, 0.9)
+                fromView?.layer.add(transform, forKey: nil)
             }
         }
         
+        // Dismiss
         if let fromVc = transitionContext.viewController(forKey: .from), fromVc.isBeingDismissed {
-
+            
             guard let fromView = transitionContext.view(forKey: .from) else {
                 transitionContext.completeTransition(true)
                 return
@@ -171,10 +178,17 @@ extension Animator: UIViewControllerAnimatedTransitioning {
             } else {
                 UIView.animate(withDuration: duration, delay: 0, options: [.allowUserInteraction, .curveEaseInOut], animations: {
                     fromView.frame.origin.y = container.bounds.maxY
-                    toView.layer.transform = CATransform3DIdentity
                 }, completion: { (flag) in
                     transitionContext.completeTransition(flag)
                 })
+                
+                let transform = CABasicAnimation.init(keyPath: "transform")
+                transform.duration = duration
+                transform.fillMode = kCAFillModeForwards
+                transform.isRemovedOnCompletion = false
+                transform.toValue = CATransform3DIdentity
+                //                transform.fromValue = CATransform3DMakeScale(0.9, 0.9, 0.9)
+                toView.layer.add(transform, forKey: nil)
             }
         }
     }

@@ -7,26 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B1361D721FB0377400B2F5E8 /* AlertKit.h in Headers */ = {isa = PBXBuildFile; fileRef = B1361D6B1FB0377400B2F5E8 /* AlertKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B120C1202108B09500714CC1 /* Array+LayoutAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B120C11F2108B09500714CC1 /* Array+LayoutAdditions.swift */; };
+		B120C1262108C8C900714CC1 /* TextFiled.swift in Sources */ = {isa = PBXBuildFile; fileRef = B120C1252108C8C900714CC1 /* TextFiled.swift */; };
+		B1361D721FB0377400B2F5E8 /* Alarmer.h in Headers */ = {isa = PBXBuildFile; fileRef = B1361D6B1FB0377400B2F5E8 /* Alarmer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B1361D861FB039DD00B2F5E8 /* Alarmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D811FB039DD00B2F5E8 /* Alarmer.swift */; };
 		B1361D871FB039DD00B2F5E8 /* Proxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D821FB039DD00B2F5E8 /* Proxy.swift */; };
-		B1361D881FB039DD00B2F5E8 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D831FB039DD00B2F5E8 /* Reusable.swift */; };
 		B1361D891FB039DD00B2F5E8 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D841FB039DD00B2F5E8 /* Action.swift */; };
 		B1361D8A1FB039DD00B2F5E8 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1361D851FB039DD00B2F5E8 /* Animator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B1361D6B1FB0377400B2F5E8 /* AlertKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertKit.h; sourceTree = "<group>"; };
+		B120C11F2108B09500714CC1 /* Array+LayoutAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+LayoutAdditions.swift"; sourceTree = "<group>"; };
+		B120C1252108C8C900714CC1 /* TextFiled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFiled.swift; sourceTree = "<group>"; };
+		B1361D6B1FB0377400B2F5E8 /* Alarmer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alarmer.h; sourceTree = "<group>"; };
 		B1361D6D1FB0377400B2F5E8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B1361D791FB0381700B2F5E8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
-		B1361D7B1FB0383700B2F5E8 /* AlertKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AlertKit.podspec; sourceTree = SOURCE_ROOT; };
+		B1361D7B1FB0383700B2F5E8 /* Alarmer.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Alarmer.podspec; sourceTree = SOURCE_ROOT; };
 		B1361D7C1FB0383700B2F5E8 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		B1361D811FB039DD00B2F5E8 /* Alarmer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alarmer.swift; sourceTree = "<group>"; };
 		B1361D821FB039DD00B2F5E8 /* Proxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Proxy.swift; sourceTree = "<group>"; };
-		B1361D831FB039DD00B2F5E8 /* Reusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		B1361D841FB039DD00B2F5E8 /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		B1361D851FB039DD00B2F5E8 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
-		B1D28F291D50CEC5001B8AE9 /* AlertKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AlertKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1D28F291D50CEC5001B8AE9 /* Alarmer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alarmer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,7 +46,6 @@
 			isa = PBXGroup;
 			children = (
 				B1361D801FB0397800B2F5E8 /* Core */,
-				B1361D8C1FB03A9D00B2F5E8 /* Features */,
 				B1361D7F1FB0393800B2F5E8 /* Supporting Files */,
 			);
 			path = Source;
@@ -53,7 +54,7 @@
 		B1361D771FB037F300B2F5E8 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
-				B1361D7B1FB0383700B2F5E8 /* AlertKit.podspec */,
+				B1361D7B1FB0383700B2F5E8 /* Alarmer.podspec */,
 				B1361D7C1FB0383700B2F5E8 /* LICENSE */,
 			);
 			name = Documentation;
@@ -70,7 +71,7 @@
 		B1361D7F1FB0393800B2F5E8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				B1361D6B1FB0377400B2F5E8 /* AlertKit.h */,
+				B1361D6B1FB0377400B2F5E8 /* Alarmer.h */,
 				B1361D6D1FB0377400B2F5E8 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -82,17 +83,11 @@
 				B1361D841FB039DD00B2F5E8 /* Action.swift */,
 				B1361D811FB039DD00B2F5E8 /* Alarmer.swift */,
 				B1361D851FB039DD00B2F5E8 /* Animator.swift */,
+				B120C1252108C8C900714CC1 /* TextFiled.swift */,
+				B120C11F2108B09500714CC1 /* Array+LayoutAdditions.swift */,
+				B1361D821FB039DD00B2F5E8 /* Proxy.swift */,
 			);
 			name = Core;
-			sourceTree = "<group>";
-		};
-		B1361D8C1FB03A9D00B2F5E8 /* Features */ = {
-			isa = PBXGroup;
-			children = (
-				B1361D821FB039DD00B2F5E8 /* Proxy.swift */,
-				B1361D831FB039DD00B2F5E8 /* Reusable.swift */,
-			);
-			name = Features;
 			sourceTree = "<group>";
 		};
 		B1D28F1F1D50CEC5001B8AE9 = {
@@ -108,7 +103,7 @@
 		B1D28F2A1D50CEC5001B8AE9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B1D28F291D50CEC5001B8AE9 /* AlertKit.framework */,
+				B1D28F291D50CEC5001B8AE9 /* Alarmer.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -120,16 +115,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1361D721FB0377400B2F5E8 /* AlertKit.h in Headers */,
+				B1361D721FB0377400B2F5E8 /* Alarmer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		B1D28F281D50CEC5001B8AE9 /* AlertKit */ = {
+		B1D28F281D50CEC5001B8AE9 /* Alarmer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B1D28F311D50CEC5001B8AE9 /* Build configuration list for PBXNativeTarget "AlertKit" */;
+			buildConfigurationList = B1D28F311D50CEC5001B8AE9 /* Build configuration list for PBXNativeTarget "Alarmer" */;
 			buildPhases = (
 				B1D28F241D50CEC5001B8AE9 /* Sources */,
 				B1D28F251D50CEC5001B8AE9 /* Frameworks */,
@@ -140,9 +135,9 @@
 			);
 			dependencies = (
 			);
-			name = AlertKit;
+			name = Alarmer;
 			productName = MLVAlertKit;
-			productReference = B1D28F291D50CEC5001B8AE9 /* AlertKit.framework */;
+			productReference = B1D28F291D50CEC5001B8AE9 /* Alarmer.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -152,16 +147,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0910;
-				LastUpgradeCheck = 0910;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = NEET;
 				TargetAttributes = {
 					B1D28F281D50CEC5001B8AE9 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0910;
+						LastSwiftMigration = 0940;
 					};
 				};
 			};
-			buildConfigurationList = B1D28F231D50CEC5001B8AE9 /* Build configuration list for PBXProject "AlertKit" */;
+			buildConfigurationList = B1D28F231D50CEC5001B8AE9 /* Build configuration list for PBXProject "Alarmer" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -174,7 +169,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B1D28F281D50CEC5001B8AE9 /* AlertKit */,
+				B1D28F281D50CEC5001B8AE9 /* Alarmer */,
 			);
 		};
 /* End PBXProject section */
@@ -195,9 +190,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1361D8A1FB039DD00B2F5E8 /* Animator.swift in Sources */,
-				B1361D881FB039DD00B2F5E8 /* Reusable.swift in Sources */,
+				B120C1202108B09500714CC1 /* Array+LayoutAdditions.swift in Sources */,
 				B1361D891FB039DD00B2F5E8 /* Action.swift in Sources */,
 				B1361D871FB039DD00B2F5E8 /* Proxy.swift in Sources */,
+				B120C1262108C8C900714CC1 /* TextFiled.swift in Sources */,
 				B1361D861FB039DD00B2F5E8 /* Alarmer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -218,12 +214,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -274,12 +272,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -324,9 +324,9 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.neet.AlertKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.neet.Alarmer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -346,9 +346,9 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.neet.AlertKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.neet.Alarmer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
@@ -358,7 +358,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B1D28F231D50CEC5001B8AE9 /* Build configuration list for PBXProject "AlertKit" */ = {
+		B1D28F231D50CEC5001B8AE9 /* Build configuration list for PBXProject "Alarmer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B1D28F2F1D50CEC5001B8AE9 /* Debug */,
@@ -367,7 +367,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B1D28F311D50CEC5001B8AE9 /* Build configuration list for PBXNativeTarget "AlertKit" */ = {
+		B1D28F311D50CEC5001B8AE9 /* Build configuration list for PBXNativeTarget "Alarmer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B1D28F321D50CEC5001B8AE9 /* Debug */,

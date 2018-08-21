@@ -1,5 +1,5 @@
 //
-//  AlertKit.h
+//  Alarmer.h
 //
 //  Copyright (c) 2017 NEET. All rights reserved.
 //
@@ -24,12 +24,12 @@
 
 #import <UIKit/UIKit.h>
 
-//! Project version number for AlertKit.
-FOUNDATION_EXPORT double AlertKitVersionNumber;
+//! Project version number for Alarmer.
+FOUNDATION_EXPORT double AlarmerVersionNumber;
 
-//! Project version string for AlertKit.
-FOUNDATION_EXPORT const unsigned char AlertKitVersionString[];
+//! Project version string for Alarmer.
+FOUNDATION_EXPORT const unsigned char AlarmerVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <AlertKit/PublicHeader.h>
+// In this header, you should import all the public headers of your framework using statements like #import <Alarmer/PublicHeader.h>
 
 
