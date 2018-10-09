@@ -23,14 +23,14 @@ final class TextField: UITextField {
     }
     
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, UIEdgeInsetsMake(0, 5, 0, 5))
+        return bounds.inset(by: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5))
     }
     
     override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, UIEdgeInsetsMake(0, 5, 0, 5))
+        return bounds.inset(by: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5))
     }
     
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, UIEdgeInsetsMake(0, 5, 0, 5))
+        return bounds.inset(by: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5))
     }
 }

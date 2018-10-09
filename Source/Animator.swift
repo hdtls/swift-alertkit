@@ -25,7 +25,7 @@
 import UIKit
 
 open class Animator: NSObject {
-    public let preferredStyle: AlarmerStyle
+    public let preferredStyle: Alarmer.Style
     
     fileprivate var toViewYArchor: NSLayoutConstraint?
     fileprivate var observations: [NSObjectProtocol]?
@@ -37,7 +37,7 @@ open class Animator: NSObject {
         observations = nil
     }
     
-    public init(preferredStyle: AlarmerStyle) {
+    public init(preferredStyle: Alarmer.Style) {
         self.preferredStyle = preferredStyle
     }
 }
@@ -98,16 +98,16 @@ extension Animator: UIViewControllerAnimatedTransitioning {
                 
                 // Keyboard appearance
                 observations = [
-                    NotificationCenter.default.addObserver(forName: .UIKeyboardWillShow, object: nil, queue: nil, using: { [weak self](note) in
-                        let duration = note.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
-                        let aValue = note.userInfo?[UIKeyboardFrameEndUserInfoKey] as? CGRect ?? .zero
+                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: nil, using: { [weak self](note) in
+                        let duration = note.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
+                        let aValue = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect ?? .zero
                         self?.toViewYArchor?.constant = -(aValue.height / 2)
                         UIView.animate(withDuration: duration, animations: {
                             container.layoutIfNeeded()
                         })
                     }),
-                    NotificationCenter.default.addObserver(forName: .UIKeyboardWillHide, object: nil, queue: nil, using: { [weak self] note in
-                        let duration = note.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
+                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: nil, using: { [weak self] note in
+                        let duration = note.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
                         self?.toViewYArchor?.constant = 0
                         UIView.animate(withDuration: duration, animations: {
                             container.layoutIfNeeded()
@@ -146,7 +146,7 @@ extension Animator: UIViewControllerAnimatedTransitioning {
                 
                 let transform = CABasicAnimation.init(keyPath: "transform")
                 transform.duration = duration
-                transform.fillMode = kCAFillModeForwards
+                transform.fillMode = CAMediaTimingFillMode.forwards
                 transform.isRemovedOnCompletion = false
                 transform.fromValue = CATransform3DIdentity
                 transform.toValue = CATransform3DMakeScale(0.9, 0.9, 0.9)
@@ -184,7 +184,7 @@ extension Animator: UIViewControllerAnimatedTransitioning {
                 
                 let transform = CABasicAnimation.init(keyPath: "transform")
                 transform.duration = duration
-                transform.fillMode = kCAFillModeForwards
+                transform.fillMode = CAMediaTimingFillMode.forwards
                 transform.isRemovedOnCompletion = false
                 transform.toValue = CATransform3DIdentity
                 //                transform.fromValue = CATransform3DMakeScale(0.9, 0.9, 0.9)

@@ -24,16 +24,15 @@
 
 import UIKit
 
-/// Enum that specifies the style of the alert controller
-public enum AlarmerStyle: Int {
-    case actionSheet
-    case alert
-}
-
 open class Alarmer: UIViewController {
+    /// Enum that specifies the style of the alert controller
+    public enum Style: Int {
+        case actionSheet
+        case alert
+    }
     
     /// The style for Alarmer instance
-    public let preferredStyle: AlarmerStyle
+    public let preferredStyle: Alarmer.Style
     
     /// The textFields added to the Alarmer instance
     open var textFields: [UITextField] { return _textFields }
@@ -52,7 +51,7 @@ open class Alarmer: UIViewController {
     }
     
     open private(set) var accessoryView: UIView?
-    open var accessoryViewBackgroundColor: UIColor? {
+    open var accessoryViewBackgroundColor: UIColor? = #colorLiteral(red: 0.6470588235, green: 0, blue: 0.05098039216, alpha: 1) {
         didSet {
             accessoryView?.backgroundColor = accessoryViewBackgroundColor
         }
@@ -90,30 +89,18 @@ open class Alarmer: UIViewController {
     ///   - title: The title that Alarmer will display
     ///   - message: The message that Alarmer will display
     ///   - preferredStyle: See enum 'AlarmerStyle' for more info
-    public convenience init(title: String?, message: String?, preferredStyle: AlarmerStyle) {
-        #if swift(>=4.0)
-        typealias TextAttributes = [NSAttributedStringKey : Any]
-        #else
-        typealias TextAttributes = [String : Any]
-        #endif
-        
-        func textAttributes(withStyle style: UIFontTextStyle = .headline, textColor: UIColor = .white) -> TextAttributes {
+    public convenience init(title: String?, message: String?, preferredStyle: Alarmer.Style) {
+        typealias TextAttributes = [NSAttributedString.Key : Any]
+       
+        func textAttributes(withStyle style: UIFont.TextStyle = .headline, textColor: UIColor = .white) -> TextAttributes {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .center
             
-            #if swift(>=4.0)
             return [
                 .font : UIFont.preferredFont(forTextStyle: style),
                 .foregroundColor : textColor,
                 .paragraphStyle : paragraphStyle
             ]
-            #else
-            return [
-            NSFontAttributeName : UIFont.preferredFont(forTextStyle: style),
-            NSForegroundColorAttributeName : textColor,
-            NSParagraphStyleAttributeName : paragraphStyle
-            ]
-            #endif
         }
         
         let _title = title == nil
@@ -133,7 +120,7 @@ open class Alarmer: UIViewController {
     ///   - attributedTitle: The attributed title that Alarmer will display
     ///   - message: The attributed message that Alarmer will display
     ///   - preferredStyle: See enum 'AlarmerStyle' for more info
-    public init(attributedTitle: NSAttributedString?, message: NSAttributedString?, preferredStyle: AlarmerStyle) {
+    public init(attributedTitle: NSAttributedString?, message: NSAttributedString?, preferredStyle: Alarmer.Style) {
         self.preferredStyle = preferredStyle
         
         super.init(nibName: nil, bundle: nil)
@@ -165,7 +152,7 @@ open class Alarmer: UIViewController {
         _tableView.bounces = false
         _tableView.showsVerticalScrollIndicator = false
         _tableView.separatorInset = .zero
-        _tableView.rowHeight = UITableViewAutomaticDimension
+        _tableView.rowHeight = UITableView.automaticDimension
         _tableView.estimatedRowHeight = 44
         _tableView.tableFooterView = UIView()
         _tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
@@ -336,11 +323,11 @@ open class Alarmer: UIViewController {
             _tableView.observe(\UITableView.contentSize) { [weak self](tableView, change) in
                 self?._tableViewHeightLayoutConstraint?.constant = tableView.contentSize.height
             },
-            NotificationCenter.default.addObserver(forName: .UIKeyboardDidShow, object: nil, queue: nil, using: { [weak self](note) in
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidShowNotification, object: nil, queue: nil, using: { [weak self](note) in
                 guard let strongSelf = self else { return }
                 strongSelf._tableView.isScrollEnabled = strongSelf._tableView.contentSize.height - strongSelf.view.bounds.height > 0
             }),
-            NotificationCenter.default.addObserver(forName: .UIKeyboardDidHide, object: nil, queue: nil, using: { [weak self](note) in
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidHideNotification, object: nil, queue: nil, using: { [weak self](note) in
                 guard let strongSelf = self else { return }
                 strongSelf._tableView.isScrollEnabled = UIScreen.main.bounds.height - strongSelf.view.bounds.height < 0
             })
@@ -358,7 +345,7 @@ open class Alarmer: UIViewController {
         animation.values = [maxY, minY + 2, minY - 2, minY + 1, minY - 1, minY]
         accessoryView?.isHidden = false
         animation.keyTimes = [0, 0.3, 0.5, 0.7, 0.8, 0.9]
-        animation.fillMode = kCAFillModeForwards
+        animation.fillMode = CAMediaTimingFillMode.forwards
         animation.isRemovedOnCompletion = false
         accessoryView?.layer.add(animation, forKey: nil)
     }
