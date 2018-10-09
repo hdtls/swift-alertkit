@@ -24,18 +24,19 @@
 
 import UIKit
 
-/// Enum that specifies the style of the actions
-public enum ActionStyle: Int {
-    case `default`
-    case cancel
-    case destructive
-}
-
 public class Action: NSObject {
+    
+    /// Enum that specifies the style of the actions
+    public enum Style: Int {
+        case `default`
+        case cancel
+        case destructive
+    }
+    
     public let title: String
     public let attributedTitle: NSAttributedString
     public var isEnabled: Bool = true
-    public let style: ActionStyle
+    public let style: Action.Style
     var handler: ((Action) -> Void)? = nil
     
     /// Initialize a action by given it's title, style and handler
@@ -44,26 +45,17 @@ public class Action: NSObject {
     ///   - title: The title that action will display
     ///   - style: The style of the action
     ///   - handler: The action handler for action, a block that will be fired when action selected
-    public convenience init(title: String, style: ActionStyle, handler: ((Action) -> Void)?) {
+    public convenience init(title: String, style: Action.Style, handler: ((Action) -> Void)?) {
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         
-        #if swift(>=4.0)
-        let attributes: [NSAttributedStringKey : Any] = [
+        let attributes: [NSAttributedString.Key : Any] = [
             .font : UIFont.preferredFont(forTextStyle: .body),
             .foregroundColor : style == .destructive ? #colorLiteral(red: 0.6470588235, green: 0, blue: 0.05098039216, alpha: 1) : .black,
             .paragraphStyle : paragraphStyle
         ]
         self.init(attributedTitle: NSAttributedString.init(string: title, attributes: attributes), style: style, handler: handler)
-        #else
-        let attributes: [String : Any] = [
-        NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
-        NSForegroundColorAttributeName : style == .destructive ? #colorLiteral(red: 0.6470588235, green: 0, blue: 0.05098039216, alpha: 1) : .black,
-        NSParagraphStyleAttributeName : paragraphStyle
-        ]
-        self.init(attributedTitle: NSAttributedString.init(string: title, attributes: attributes), style: style, handler: handler)
-        #endif
     }
     
     /// Initialize a action by given it's attributed title, style and handler
@@ -72,7 +64,7 @@ public class Action: NSObject {
     ///   - attributedTitle: The attributed title that action will display
     ///   - style: The style of the action
     ///   - handler: The action handler for action, a block that will be fired when action selected
-    public init(attributedTitle: NSAttributedString, style: ActionStyle, handler: ((Action) -> Void)?) {
+    public init(attributedTitle: NSAttributedString, style: Action.Style, handler: ((Action) -> Void)?) {
         self.style = style
         self.attributedTitle = attributedTitle
         self.title = attributedTitle.string

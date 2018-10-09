@@ -26,7 +26,7 @@ import UIKit
 
 class DelegateProxy: NSObject {
     
-    var preferredStyle: AlarmerStyle = .alert
+    var preferredStyle: Alarmer.Style = .alert
     var models: [Any] = []
     var cellFactory: ((UITableView, IndexPath, Any) -> UITableViewCell)! = nil
     var textFieldReturn: ((UITextField) -> Bool)?
