@@ -1,7 +1,7 @@
 //
-//  UIAlarmer.swift
+//  AlertController.swift
 //
-//  Copyright (c) 2017 NEET. All rights reserved.
+//  Copyright (c) 2017 Junfeng Zhang All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,22 +24,22 @@
 
 import UIKit
 
-open class UIAlarmer: UIViewController {
+open class AlertController: UIViewController {
     
     /// Enum that specifies the style of the alert controller
-    public enum Style: Int {
+    public enum Style {
         case actionSheet
         case alert
     }
     
     /// The style for UIAlarmer instance
-    public let preferredStyle: UIAlarmer.Style
+    public let preferredStyle: AlertController.Style
     
     /// The textFields added to the UIAlarmer instance
     open var textFields: [UITextField] { return _textFields }
     
     /// The actions added to the UIAlarmer instance
-    open var actions: [Action] { return _actions }
+    open var actions: [AlertAction] { return _actions }
     
     /// The message for UIAlarmer instance
     open var message: String?
@@ -63,8 +63,8 @@ open class UIAlarmer: UIViewController {
     }
     
     private var _tableView: UITableView!
-    private var _extras: [Action] = []
-    private var _actions: [Action] = []
+    private var _extras: [AlertAction] = []
+    private var _actions: [AlertAction] = []
     private var _textFields: [UITextField] = []
     private var _cornerRadius: CGFloat = 10
     private var _proxy: DelegateProxy = DelegateProxy()
@@ -84,13 +84,13 @@ open class UIAlarmer: UIViewController {
         self.init(attributedTitle: nil, message: nil, preferredStyle: .actionSheet)
     }
     
-    /// Initialize UIAlarmer by given it's title, message and preferred style
+    /// Initialize AlertController by given it's title, message and preferred style
     ///
     /// - Parameters:
-    ///   - title: The title that UIAlarmer will display
-    ///   - message: The message that UIAlarmer will display
+    ///   - title: The title that AlertController will display
+    ///   - message: The message that AlertController will display
     ///   - preferredStyle: See enum 'AlarmerStyle' for more info
-    public convenience init(title: String?, message: String?, preferredStyle: UIAlarmer.Style) {
+    public convenience init(title: String?, message: String?, preferredStyle: AlertController.Style) {
         typealias TextAttributes = [NSAttributedString.Key : Any]
        
         func textAttributes(withStyle style: UIFont.TextStyle = .headline, textColor: UIColor = .white) -> TextAttributes {
@@ -115,13 +115,13 @@ open class UIAlarmer: UIViewController {
     }
     
     
-    /// Initialize UIAlarmer by given it's attributed title, message and preferred style
+    /// Initialize AlertController by given it's attributed title, message and preferred style
     ///
     /// - Parameters:
-    ///   - attributedTitle: The attributed title that UIAlarmer will display
-    ///   - message: The attributed message that UIAlarmer will display
+    ///   - attributedTitle: The attributed title that AlertController will display
+    ///   - message: The attributed message that AlertController will display
     ///   - preferredStyle: See enum 'AlarmerStyle' for more info
-    public init(attributedTitle: NSAttributedString?, message: NSAttributedString?, preferredStyle: UIAlarmer.Style) {
+    public init(attributedTitle: NSAttributedString?, message: NSAttributedString?, preferredStyle: AlertController.Style) {
         self.preferredStyle = preferredStyle
         
         super.init(nibName: nil, bundle: nil)
@@ -130,14 +130,14 @@ open class UIAlarmer: UIViewController {
         self.message = message?.string
         
         if attributedTitle != nil {
-            let additionalAction = Action(attributedTitle: attributedTitle!, style: .default, handler: nil)
+            let additionalAction = AlertAction(attributedTitle: attributedTitle!, style: .default, handler: nil)
             additionalAction.isEnabled = false
             
             _extras.append(additionalAction)
         }
         
         if message != nil {
-            let additionalAction = Action(title: message!.string, style: .default, handler: nil)
+            let additionalAction = AlertAction(title: message!.string, style: .default, handler: nil)
             additionalAction.isEnabled = false
             
             _extras.append(additionalAction)
@@ -272,14 +272,14 @@ open class UIAlarmer: UIViewController {
             //remove all cached textField
             cell.contentView.subviews.filter({ $0 is UITextField }).forEach({ $0.removeFromSuperview() })
             
-            if let action = action as? Action {
+            if let action = action as? AlertAction {
                 cell.selectedBackgroundView = action.style != .cancel ? nil : {
                     let backgroundView = UIView()
                     backgroundView.backgroundColor = #colorLiteral(red: 0.9992782474, green: 0.8981826901, blue: 0.9021043777, alpha: 1)
                     return backgroundView
                     }()
                 cell.textLabel?.attributedText = action.attributedTitle
-                cell.textLabel?.numberOfLines = indexPath.row == 1 ? 0 : 1
+                cell.textLabel?.numberOfLines = 0
                 cell.textLabel?.highlightedTextColor = action.style == .cancel ? #colorLiteral(red: 0.7140869498, green: 0.09332919866, blue: 0.04985838383, alpha: 1) : nil
             } else {
                 //textField layout
@@ -295,7 +295,7 @@ open class UIAlarmer: UIViewController {
         }
         
         _proxy.itemSelected = { [weak self] in
-            guard let action = $0 as? Action else { return }
+            guard let action = $0 as? AlertAction else { return }
             if action.isEnabled {
                 action.handler?(action)
                 self?.dismiss(animated: true, completion: nil)
@@ -351,14 +351,14 @@ open class UIAlarmer: UIViewController {
         accessoryView?.layer.add(animation, forKey: nil)
     }
     
-    /// Adds a new action to the UIAlarmer instance
+    /// Adds a new action to the AlertController instance
     ///
-    /// - Parameter action: The Action that will add to UIAlarmer instance
-    open func addAction(_ action: Action) {
+    /// - Parameter action: The AlertAction that will add to AlertController instance
+    open func addAction(_ action: AlertAction) {
         assert(!isViewLoaded, "Additional action can only be added before -viewDidLoaded")
         
         if actions.contains(where: { $0.style == .cancel }) {
-            assert(action.style != .cancel, "UIAlarmer can only have one action with a style of cancel")
+            assert(action.style != .cancel, "AlertController can only have one action with a style of cancel")
             
             let loc = _actions.count - 1 >= 0 ? _actions.count - 1 : 0
             _actions.insert(action, at: loc)
@@ -369,12 +369,12 @@ open class UIAlarmer: UIViewController {
         reloadData()
     }
     
-    /// Adds a new TextField to the UIAlarmer instance, AlarmerStyleAlert only
+    /// Adds a new TextField to the AlertController instance, AlarmerStyleAlert only
     ///
     /// - Parameter handler: The configuration handler block for textFiled
     open func addTextField(withConfiguration handler: ((UITextField) -> Void)?) {
         assert(!isViewLoaded, "Additional action can only be added before -viewDidLoaded")
-        assert(preferredStyle == .alert, "Text fields can only be added to an UIAlarmer of style alert")
+        assert(preferredStyle == .alert, "Text fields can only be added to an AlertController of style alert")
         
         let textField = TextField()
         
