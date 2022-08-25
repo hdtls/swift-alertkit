@@ -5,7 +5,7 @@
 //  Copyright © 2018 NEET. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 enum LayoutAxis {
     case x
