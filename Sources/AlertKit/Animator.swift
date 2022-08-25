@@ -1,7 +1,7 @@
 //
 //  Animator.swift
 //
-//  Copyright (c) 2017 NEET. All rights reserved.
+//  Copyright (c) 2017 Junfeng Zhang All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 import UIKit
 
 open class Animator: NSObject {
-    public let preferredStyle: UIAlarmer.Style
+    public let preferredStyle: AlertController.Style
     
     fileprivate var toViewYArchor: NSLayoutConstraint?
     fileprivate var observations: [NSObjectProtocol]?
@@ -37,7 +37,7 @@ open class Animator: NSObject {
         observations = nil
     }
     
-    public init(preferredStyle: UIAlarmer.Style) {
+    public init(preferredStyle: AlertController.Style) {
         self.preferredStyle = preferredStyle
     }
 }
@@ -193,4 +193,3 @@ extension Animator: UIViewControllerAnimatedTransitioning {
         }
     }
 }
-

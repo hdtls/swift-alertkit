@@ -1,7 +1,7 @@
 //
 //  Proxy.swift
 //
-//  Copyright (c) 2017 NEET. All rights reserved.
+//  Copyright (c) 2017 Junfeng Zhang All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +26,13 @@ import UIKit
 
 class DelegateProxy: NSObject {
     
-    var preferredStyle: UIAlarmer.Style = .alert
+    var preferredStyle: AlertController.Style = .alert
     var models: [Any] = []
     var cellFactory: ((UITableView, IndexPath, Any) -> UITableViewCell)?
     var textFieldReturn: ((UITextField) -> Bool)?
     var itemSelected: ((Any) -> Void)?
     
-    init(preferredStyle: UIAlarmer.Style = .alert, models: [Any] = [], cellFactory: ((UITableView, IndexPath, Any) -> UITableViewCell)? = nil, textFieldReturn: ((UITextField) -> Bool)? = nil, itemSelected: ((Any) -> Void)? = nil) {
+    init(preferredStyle: AlertController.Style = .alert, models: [Any] = [], cellFactory: ((UITableView, IndexPath, Any) -> UITableViewCell)? = nil, textFieldReturn: ((UITextField) -> Bool)? = nil, itemSelected: ((Any) -> Void)? = nil) {
         self.preferredStyle = preferredStyle
         self.models = models
         self.cellFactory = cellFactory
@@ -45,7 +45,7 @@ extension DelegateProxy: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         let contains = models.contains {
-            guard let model = $0 as? UIAlarmer.Action, model.style == .cancel else { return false }
+            guard let model = $0 as? AlertAction, model.style == .cancel else { return false }
             return true
         }
         if preferredStyle == .actionSheet && contains {
