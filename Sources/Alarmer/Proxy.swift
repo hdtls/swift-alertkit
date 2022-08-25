@@ -26,18 +26,26 @@ import UIKit
 
 class DelegateProxy: NSObject {
     
-    var preferredStyle: Alarmer.Style = .alert
+    var preferredStyle: UIAlarmer.Style = .alert
     var models: [Any] = []
-    var cellFactory: ((UITableView, IndexPath, Any) -> UITableViewCell)! = nil
+    var cellFactory: ((UITableView, IndexPath, Any) -> UITableViewCell)?
     var textFieldReturn: ((UITextField) -> Bool)?
     var itemSelected: ((Any) -> Void)?
+    
+    init(preferredStyle: UIAlarmer.Style = .alert, models: [Any] = [], cellFactory: ((UITableView, IndexPath, Any) -> UITableViewCell)? = nil, textFieldReturn: ((UITextField) -> Bool)? = nil, itemSelected: ((Any) -> Void)? = nil) {
+        self.preferredStyle = preferredStyle
+        self.models = models
+        self.cellFactory = cellFactory
+        self.textFieldReturn = textFieldReturn
+        self.itemSelected = itemSelected
+    }
 }
 
 extension DelegateProxy: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         let contains = models.contains {
-            guard let model = $0 as? Action, model.style == .cancel else { return false }
+            guard let model = $0 as? UIAlarmer.Action, model.style == .cancel else { return false }
             return true
         }
         if preferredStyle == .actionSheet && contains {
@@ -47,7 +55,8 @@ extension DelegateProxy: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return cellFactory(tableView, indexPath, models[indexPath.row])
+        precondition(cellFactory != nil)
+        return cellFactory!(tableView, indexPath, models[indexPath.row])
     }
 }
 

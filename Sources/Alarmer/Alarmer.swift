@@ -1,5 +1,5 @@
 //
-//  Alarmer.swift
+//  UIAlarmer.swift
 //
 //  Copyright (c) 2017 NEET. All rights reserved.
 //
@@ -24,23 +24,24 @@
 
 import UIKit
 
-open class Alarmer: UIViewController {
+open class UIAlarmer: UIViewController {
+    
     /// Enum that specifies the style of the alert controller
     public enum Style: Int {
         case actionSheet
         case alert
     }
     
-    /// The style for Alarmer instance
-    public let preferredStyle: Alarmer.Style
+    /// The style for UIAlarmer instance
+    public let preferredStyle: UIAlarmer.Style
     
-    /// The textFields added to the Alarmer instance
+    /// The textFields added to the UIAlarmer instance
     open var textFields: [UITextField] { return _textFields }
     
-    /// The actions added to the Alarmer instance
+    /// The actions added to the UIAlarmer instance
     open var actions: [Action] { return _actions }
     
-    /// The message for Alarmer instance
+    /// The message for UIAlarmer instance
     open var message: String?
     
     /// The backgoundColor of title view
@@ -83,13 +84,13 @@ open class Alarmer: UIViewController {
         self.init(attributedTitle: nil, message: nil, preferredStyle: .actionSheet)
     }
     
-    /// Initialize Alarmer by given it's title, message and preferred style
+    /// Initialize UIAlarmer by given it's title, message and preferred style
     ///
     /// - Parameters:
-    ///   - title: The title that Alarmer will display
-    ///   - message: The message that Alarmer will display
+    ///   - title: The title that UIAlarmer will display
+    ///   - message: The message that UIAlarmer will display
     ///   - preferredStyle: See enum 'AlarmerStyle' for more info
-    public convenience init(title: String?, message: String?, preferredStyle: Alarmer.Style) {
+    public convenience init(title: String?, message: String?, preferredStyle: UIAlarmer.Style) {
         typealias TextAttributes = [NSAttributedString.Key : Any]
        
         func textAttributes(withStyle style: UIFont.TextStyle = .headline, textColor: UIColor = .white) -> TextAttributes {
@@ -114,13 +115,13 @@ open class Alarmer: UIViewController {
     }
     
     
-    /// Initialize Alarmer by given it's attributed title, message and preferred style
+    /// Initialize UIAlarmer by given it's attributed title, message and preferred style
     ///
     /// - Parameters:
-    ///   - attributedTitle: The attributed title that Alarmer will display
-    ///   - message: The attributed message that Alarmer will display
+    ///   - attributedTitle: The attributed title that UIAlarmer will display
+    ///   - message: The attributed message that UIAlarmer will display
     ///   - preferredStyle: See enum 'AlarmerStyle' for more info
-    public init(attributedTitle: NSAttributedString?, message: NSAttributedString?, preferredStyle: Alarmer.Style) {
+    public init(attributedTitle: NSAttributedString?, message: NSAttributedString?, preferredStyle: UIAlarmer.Style) {
         self.preferredStyle = preferredStyle
         
         super.init(nibName: nil, bundle: nil)
@@ -239,7 +240,7 @@ open class Alarmer: UIViewController {
         }
         
         _tableViewHeightLayoutConstraint = _tableView.heightAnchor.constraint(equalToConstant: 44)
-        #if swift(>=4.0)
+        #if compiler(>=4.0)
         _tableViewHeightLayoutConstraint?.priority = .defaultHigh
         #else
         _tableViewHeightLayoutConstraint?.priority = UILayoutPriority.init(750)
@@ -263,14 +264,14 @@ open class Alarmer: UIViewController {
     
     private func setupProxy() {
         _proxy.preferredStyle = preferredStyle
-        _proxy.cellFactory = { [weak self](tableView, indexPath, action) in
-            guard let strongSelf = self else { return UITableViewCell() }
+        _proxy.cellFactory = { [weak self] (tableView, indexPath, action) in
+            guard let self else { return UITableViewCell() }
             
             let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.description(), for: indexPath)
-            tableView.separatorStyle = indexPath.row < strongSelf._extras.count ? .none : .singleLine
+            tableView.separatorStyle = indexPath.row < self._extras.count ? .none : .singleLine
             
-            cell.selectionStyle = indexPath.row < strongSelf._extras.count ? .none : .default
-            cell.contentView.backgroundColor = self?.title != nil && indexPath.row == 0 ? strongSelf.tintColor : .clear
+            cell.selectionStyle = indexPath.row < self._extras.count ? .none : .default
+            cell.contentView.backgroundColor = self.title != nil && indexPath.row == 0 ? self.tintColor : .clear
             
             //remove all cached textField
             cell.contentView.subviews.filter({ $0 is UITextField }).forEach({ $0.removeFromSuperview() })
@@ -286,13 +287,13 @@ open class Alarmer: UIViewController {
                 cell.textLabel?.highlightedTextColor = action.style == .cancel ? #colorLiteral(red: 0.7140869498, green: 0.09332919866, blue: 0.04985838383, alpha: 1) : nil
             } else {
                 //textField layout
-                strongSelf.textFields.forEach({
+                self.textFields.forEach({
                     cell.contentView.addSubview($0)
                 })
                 
                 var edgeInsets = cell.layoutMargins
                 edgeInsets.bottom *= 2
-                strongSelf.textFields.distributeViewsAlongAxis(.y, fixedItemLength: 26, edgeInsets: edgeInsets)
+                self.textFields.distributeViewsAlongAxis(.y, fixedItemLength: 26, edgeInsets: edgeInsets)
             }
             return cell
         }
@@ -306,12 +307,16 @@ open class Alarmer: UIViewController {
         }
         
         _proxy.textFieldReturn = { [weak self] textField in
-            guard let index = self?.textFields.index(of: textField) else { return true }
+            guard let self else {
+                return true
+            }
+
+            guard let index = self.textFields.firstIndex(of: textField) else { return true }
             
-            if index + 1 == self?.textFields.count {
-                self?.dismiss(animated: true, completion: nil)
+            if index + 1 == self.textFields.count {
+                self.dismiss(animated: true, completion: nil)
             } else {
-                self?.textFields[index + 1].becomeFirstResponder()
+                self.textFields[index + 1].becomeFirstResponder()
             }
             
             return true
@@ -323,13 +328,13 @@ open class Alarmer: UIViewController {
             _tableView.observe(\UITableView.contentSize) { [weak self](tableView, change) in
                 self?._tableViewHeightLayoutConstraint?.constant = tableView.contentSize.height
             },
-            NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidShowNotification, object: nil, queue: nil, using: { [weak self](note) in
-                guard let strongSelf = self else { return }
-                strongSelf._tableView.isScrollEnabled = strongSelf._tableView.contentSize.height - strongSelf.view.bounds.height > 0
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidShowNotification, object: nil, queue: nil, using: { [weak self] _ in
+                guard let self else { return }
+                self._tableView.isScrollEnabled = self._tableView.contentSize.height - self.view.bounds.height > 0
             }),
-            NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidHideNotification, object: nil, queue: nil, using: { [weak self](note) in
-                guard let strongSelf = self else { return }
-                strongSelf._tableView.isScrollEnabled = UIScreen.main.bounds.height - strongSelf.view.bounds.height < 0
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidHideNotification, object: nil, queue: nil, using: { [weak self] _ in
+                guard let self = self else { return }
+                self._tableView.isScrollEnabled = UIScreen.main.bounds.height - self.view.bounds.height < 0
             })
         ]
     }
@@ -350,14 +355,14 @@ open class Alarmer: UIViewController {
         accessoryView?.layer.add(animation, forKey: nil)
     }
     
-    /// Adds a new action to the Alarmer instance
+    /// Adds a new action to the UIAlarmer instance
     ///
-    /// - Parameter action: The Action that will add to Alarmer instance
+    /// - Parameter action: The Action that will add to UIAlarmer instance
     open func addAction(_ action: Action) {
         assert(!isViewLoaded, "Additional action can only be added before -viewDidLoaded")
         
         if actions.contains(where: { $0.style == .cancel }) {
-            assert(action.style != .cancel, "Alarmer can only have one action with a style of cancel")
+            assert(action.style != .cancel, "UIAlarmer can only have one action with a style of cancel")
             
             let loc = _actions.count - 1 >= 0 ? _actions.count - 1 : 0
             _actions.insert(action, at: loc)
@@ -368,12 +373,12 @@ open class Alarmer: UIViewController {
         reloadData()
     }
     
-    /// Adds a new TextField to the Alarmer instance, AlarmerStyleAlert only
+    /// Adds a new TextField to the UIAlarmer instance, AlarmerStyleAlert only
     ///
     /// - Parameter handler: The configuration handler block for textFiled
     open func addTextField(withConfiguration handler: ((UITextField) -> Void)?) {
         assert(!isViewLoaded, "Additional action can only be added before -viewDidLoaded")
-        assert(preferredStyle == .alert, "Text fields can only be added to an alarmer of style alert")
+        assert(preferredStyle == .alert, "Text fields can only be added to an UIAlarmer of style alert")
         
         let textField = TextField()
         
