@@ -240,11 +240,7 @@ open class UIAlarmer: UIViewController {
         }
         
         _tableViewHeightLayoutConstraint = _tableView.heightAnchor.constraint(equalToConstant: 44)
-        #if compiler(>=4.0)
         _tableViewHeightLayoutConstraint?.priority = .defaultHigh
-        #else
-        _tableViewHeightLayoutConstraint?.priority = UILayoutPriority.init(750)
-        #endif
         
         constraints.append(_tableViewHeightLayoutConstraint!)
         

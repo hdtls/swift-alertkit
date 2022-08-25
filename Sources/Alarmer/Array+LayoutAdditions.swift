@@ -34,11 +34,7 @@ extension Array where Element: UIView {
             }
             
             let trailing = prev!.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -edgeInsets.right)
-            #if swift(>=4.0)
             trailing.priority = .defaultHigh
-            #else
-            trailing.priority = UILayoutPriority.init(750)
-            #endif
             
             constrains.append(trailing)
         } else if axis == .y {
@@ -54,11 +50,7 @@ extension Array where Element: UIView {
             }
             
             let trailing = prev!.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -edgeInsets.bottom)
-            #if swift(>=4.0)
             trailing.priority = .defaultHigh
-            #else
-            trailing.priority = UILayoutPriority.init(750)
-            #endif
             
             constrains.append(trailing)
         }
